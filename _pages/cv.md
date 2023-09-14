@@ -1,8 +1,6 @@
 ---
 layout: cv
-permalink: /cv
-redirect_to:
-  - /assets/pdf/cv2023.pdf
+permalink: /assets/pdf/cv2023.pdf
 title: cv
 nav: true
 nav_order: 4
