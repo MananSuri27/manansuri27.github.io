@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://manansuridotcom.github.io/sitemap.xml
+Sitemap: https://manansuri.com/sitemap.xml
