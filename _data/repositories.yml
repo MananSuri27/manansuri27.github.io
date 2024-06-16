@@ -7,6 +7,7 @@ github_repos:
   - MananSuri27/Article
   - MananSuri27/CombattingDisinformation
   - MananSuri27/ACLM
+  - MananSuri27/ArticleKnowledgeGraph 
   - MananSuri27/factual-content-gen
   - MananSuri27/MultimodalTweetAnalysis
   - MananSuri27/PatronisingAndCondescendingLanguage
@@ -17,3 +18,4 @@ github_repos:
   - MananSuri27/MultimodalTweetAnalysis
   - MananSuri27/Word2Vec-NLP
   - MananSuri27/VanillaJS-Apps
+  

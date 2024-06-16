@@ -20,7 +20,9 @@ social: true  # includes social icons at the bottom of the page
 
 Hi, I'm Manan 👋
 
-I am a Computer Engineering undergraduate at `Netaji Subhas University of Technology`, New Delhi. My academic journey has been marked by consistent excellence, earning me the prestigious CVSPK Scholar distinction, placing me consistenly within the top 5% of my cohort.
+I am an MS in Computer Science candidate at University of Maryland, College Park. I completed my B.Tech. in Computer Enginering from Netaji Subhas University of Technology, New Delhi in 2024.
+
+<!-- My academic journey has been marked by consistent excellence, earning me the prestigious CVSPK Scholar distinction, placing me consistenly within the top 5% of my cohort. -->
 
 With a keen interest in AI, Data, and Software, I've embarked on a dynamic professional journey that reflects my passion and dedication. One of my recent achievements includes serving as a `Data Science for Social Good Fellow` at the `University of Warwick` during the summer of 2023. Collaborating closely with the [Algorithmic Transparency Institute](https://ati.io/), I delved into the critical domain of greenwashing and greenmessaging. Working alongside luminaries like [Dr. Geoffrey Supran](https://people.miami.edu/profile/19dbd62ef7e2e5fcd155ef0c53f35bc8) from the University of Miami and [Dr. John Cook](https://findanexpert.unimelb.edu.au/profile/1028119-john-cook) from the University of Melbourne, I contributed to fostering transparency in this pivotal area.
 
@@ -28,7 +30,7 @@ I've also had the privilege to contribute meaningfully to the startup landscape,
 
 Research has been a cornerstone of my journey, and I've had the privilege of collaborating with distinguished minds in academia. At `Northeastern University`, I worked alongside [Dr. Divya Chaudhary](https://www.khoury.northeastern.edu/people/divya-chaudhary/) and [Dr. Ian Gorton](https://www.khoury.northeastern.edu/people/ian-gorton/), managing and guiding four research teams. Together, we delved into crucial areas such as Depressive Tendencies, Trigger Warnings, and Fine-grained Sexism Detection.
 
-My research endeavors extended to the `MIDAS Lab at IIIT Delhi`, where, under the guidance of [Dr. Rajiv Ratan Shah](https://www.iiitd.ac.in/rajivratn), I explored the intricate interplay of speech disfluency, conversational context, and user history for the vital task of hate speech detection.
+<!-- My research endeavors extended to the `MIDAS Lab at IIIT Delhi`, where, under the guidance of [Dr. Rajiv Ratan Shah](https://www.iiitd.ac.in/rajivratn), I explored the intricate interplay of speech disfluency, conversational context, and user history for the vital task of hate speech detection. -->
 
 Currently, I am privileged to be under the mentorship of [Dr. Dinesh Manocha](https://www.cs.umd.edu/people/dmanocha) at the `GAMMA Lab, University of Maryland, College Park`. My current works encompass Implicit Hate Speech, pioneering Data Augmentation techniques for Low Resource Complex Named Entity Recognition, and the innovative realm of text-guided document editing.
 
