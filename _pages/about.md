@@ -6,7 +6,7 @@ subtitle: MS in Computer Science at University of Maryland, College Park
 
 profile:
   align: right
-  image: manansuri.jpg
+  image: manansuri.jpeg
   image_circular: false # crops the image to make it circular
   address: >
     <!--<p>can put a caption here</p>-->
