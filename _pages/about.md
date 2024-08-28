@@ -34,7 +34,7 @@ Research has been a cornerstone of my journey, and I've had the privilege of col
 
 <!-- My research endeavors extended to the `MIDAS Lab at IIIT Delhi`, where, under the guidance of [Dr. Rajiv Ratan Shah](https://www.iiitd.ac.in/rajivratn), I explored the intricate interplay of speech disfluency, conversational context, and user history for the vital task of hate speech detection. -->
 
-<!-- Currently, I am privileged to be under the mentorship of [Dr. Dinesh Manocha](https://www.cs.umd.edu/people/dmanocha) at the `GAMMA Lab, University of Maryland, College Park`. My current works encompass Implicit Hate Speech, pioneering Data Augmentation techniques for Low Resource Complex Named Entity Recognition, and the innovative realm of text-guided document editing. --> -->
+<!-- Currently, I am privileged to be under the mentorship of [Dr. Dinesh Manocha](https://www.cs.umd.edu/people/dmanocha) at the `GAMMA Lab, University of Maryland, College Park`. My current works encompass Implicit Hate Speech, pioneering Data Augmentation techniques for Low Resource Complex Named Entity Recognition, and the innovative realm of text-guided document editing. --> 
 
 
 I served as a `Data Science for Social Good Fellow` at the `University of Warwick` in 2023, collaborating with the [Algorithmic Transparency Institute](https://ati.io/) on greenwashing and greenmessaging with [Dr. Geoffrey Supran](https://people.miami.edu/profile/19dbd62ef7e2e5fcd155ef0c53f35bc8) and [Dr. John Cook](https://findanexpert.unimelb.edu.au/profile/1028119-john-cook).
