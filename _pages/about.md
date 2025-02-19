@@ -20,7 +20,7 @@ social: true  # includes social icons at the bottom of the page
 
 <!-- Hi, I'm Manan 👋 -->
 
-I am an MS in Computer Science candidate at University of Maryland, College Park. I completed my B.Tech. in Computer Enginering from Netaji Subhas University of Technology, New Delhi in 2024.
+I am an MS/Phd Computer Science candidate at University of Maryland, College Park. I completed my B.Tech. in Computer Enginering from Netaji Subhas University of Technology, New Delhi in 2024.
 
 
 
