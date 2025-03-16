@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: MS in Computer Science at University of Maryland, College Park
+subtitle: PhD in Computer Science at University of Maryland, College Park
 
 profile:
   align: right
