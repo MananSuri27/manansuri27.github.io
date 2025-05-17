@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Our paper "VisDoM: Multi-Document QA with Visually Rich Elements Using Multimodal Retrieval-Augmented Generation" got accepted at NAACL 2025, main conference!
+Our paper "VisDoM: Multi-Document QA with Visually Rich Elements Using Multimodal Retrieval-Augmented Generation" was accepted at NAACL 2025, main conference!
