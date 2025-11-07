@@ -85,8 +85,7 @@ url={https://openreview.net/forum?id=dGuMR8tLDs}
   numpages = {6},
   keywords = {NLP, computational social science, depression},
   location = {Sanya, China},
-  series = {MLNLP '22},
-  selected={true}
+  series = {MLNLP '22}
 }
 
 @inproceedings{suri-etal-2022-nsut,
@@ -124,7 +123,6 @@ url={https://openreview.net/forum?id=dGuMR8tLDs}
     doi = "10.18653/v1/2022.semeval-1.63",
     pages = "464--472",
     abstract = "This paper describes our system for Task 4 of SemEval 2022: Patronizing and Condescending Language Detection. Patronizing and Condescending Language (PCL) refers to language used with respect to vulnerable communities that portrays them in a pitiful way and is reflective of a sense of superiority. Task 4 involved binary classification (Subtask 1) and multi-label classification (Subtask 2) of Patronizing and Condescending Language (PCL). For our system, we experimented with fine-tuning different transformer-based pre-trained models including BERT, DistilBERT, RoBERTa and ALBERT. Further, we have used token separated metadata in order to improve our model by helping it contextualize different communities with respect to PCL. We faced the challenge of class imbalance, which we solved by experimenting with different class weighting schemes. Our models were effective in both subtasks, with the best performance coming out of models with Effective Number of Samples (ENS) class weighting and token separated metadata in both subtasks. For subtask 1 and subtask 2, our best models were finetuned BERT and RoBERTa models respectively.",
-    selected={true}
 }
 
 @inproceedings{DBLP:conf/clef/SuriKD22,
@@ -245,4 +243,30 @@ selected={true}
     pages = "22447--22462",
     ISBN = "979-8-89176-251-0",
     abstract = "The growing capabilities of multimodal large language models (MLLMs) have advanced tasks like chart understanding. However, these models often suffer from hallucinations, where generated text sequences conflict with the provided visual data. To address this, we introduce Post-Hoc Visual Attribution for Charts, which identifies fine-grained chart elements that validate a given chart-associated response. We propose ChartLens, a novel chart attribution algorithm that uses segmentation-based techniques to identify chart objects and employs set-of-marks prompting with MLLMs for fine-grained visual attribution. Additionally, we present ChartVA-Eval, a benchmark with synthetic and real-world charts from diverse domains like finance, policy, and economics, featuring fine-grained attribution annotations. Our evaluations show that ChartLens improves fine-grained attributions by 26-66{\%}."
+}
+
+
+@inproceedings{suri-etal-2025-follow,
+    title = "Follow the Flow: Fine-grained Flowchart Attribution with Neurosymbolic Agents",
+    author = "Suri, Manan  and
+      Mathur, Puneet  and
+      Lipka, Nedim  and
+      Dernoncourt, Franck  and
+      Rossi, Ryan A.  and
+      Gupta, Vivek  and
+      Manocha, Dinesh",
+    editor = "Christodoulopoulos, Christos  and
+      Chakraborty, Tanmoy  and
+      Rose, Carolyn  and
+      Peng, Violet",
+    booktitle = "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
+    month = nov,
+    year = "2025",
+    address = "Suzhou, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.emnlp-main.1144/",
+    pages = "22496--22519",
+    ISBN = "979-8-89176-332-6",
+    abstract = "Flowcharts are a critical tool for visualizing decision-making processes. However, their non-linear structure and complex visual-textual relationships make it challenging to interpret them using LLMs, as vision-language models frequently hallucinate nonexistent connections and decision paths when analyzing these diagrams. This leads to compromised reliability for automated flowchart processing in critical domains such as logistics, health, and engineering. We introduce the task of Fine-grained Flowchart Attribution, which traces specific components grounding a flowchart referring LLM response. Flowchart Attribution ensures the verifiability of LLM predictions and improves explainability by linking generated responses to the flowchart{'}s structure. We propose FlowPathAgent, a neurosymbolic agent that performs fine-grained post hoc attribution through graph-based reasoning. It first segments the flowchart, then converts it into a structured symbolic graph, and then employs an agentic approach to dynamically interact with the graph, to generate attribution paths. Additionally, we present FlowExplainBench, a novel benchmark for evaluating flowchart attributions across diverse styles, domains, and question types. Experimental results show that FlowPathAgent mitigates visual hallucinations in LLM answers over flowchart QA, outperforming strong baselines by 10{--}14{\%} on our proposed FlowExplainBench dataset.",
+    selected = {true}
 }
