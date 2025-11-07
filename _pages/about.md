@@ -20,6 +20,6 @@ social: true
 
 I am a PhD student in Computer Science at the University of Maryland, College Park, advised by [Prof. Dinesh Manocha](https://www.cs.umd.edu/people/dmanocha) at the GAMMA Lab.
 
-My research focuses on grounding language models through retrieval, attribution, agents, and reasoning, with an emphasis on semi-structured and multimodal data such as documents, tables, and charts. I am particularly interested in how context can be constructed and used effectively in generation, decision-making, and task-oriented agents.
+My research interests span LLM-based agents across a range of applications, including document and multimodal understanding, code and software engineering workflows, and general-purpose API-driven agents. More broadly, I work on grounding language models through retrieval, attribution, and structured reasoning, with a focus on how context is constructed, selected, and used effectively in generation, decision-making, and complex task execution.
 
 Previously, I worked on greenwashing detection as a Data Science for Social Good Fellow at the University of Warwick, collaborating with the [Algorithmic Transparency Institute](https://ati.io/). I also contributed to fact attribution and document retrieval systems at [Scalenut](https://www.scalenut.com/).
