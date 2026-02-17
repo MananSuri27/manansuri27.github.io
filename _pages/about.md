@@ -24,4 +24,4 @@ My research interests span LLM-based agents across a range of applications, incl
 
 Previously, I worked on greenwashing detection as a Data Science for Social Good Fellow at the University of Warwick, collaborating with the [Algorithmic Transparency Institute](https://ati.io/). I also contributed to fact attribution and document retrieval systems at [Scalenut](https://www.scalenut.com/). Last summer, I interned as an Applied Science Intern at  [Amazon](https://kiro.dev/), working on software engineering agents. 
 
-This summer, I will be joining Meta Superintelligence Labs as a research intern in Menlo Park — looking forward to connecting with people in the Bay Area!
+This summer, I will be joining [Meta Superintelligence Labs](https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs) as a research intern in Menlo Park — looking forward to connecting with people in the Bay Area!
