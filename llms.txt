@@ -10,6 +10,29 @@ Identifiers: ORCID https://orcid.org/0000-0001-5089-2658 · Google Scholar https
 
 - [About](/): bio, news, press, talks, service
 - [Publications](/publications/): all papers with abstracts, PDF, code, and bibtex
+- Paper pages (one page per paper with abstract, figure, results, links, and bibtex):
+- [Omni2LoRA: Coherence-Preserving Parametric Memory for Efficient Omni Language Models](/papers/omni2lora/) (arXiv 2026)
+- [CyberForge: Verified Vulnerability Injection at Repository Level for Cybersecurity Agent Training](/papers/cyberforge/) (arXiv 2026)
+- [Frames2LoRA: Parametric Video Internalization for Vision-Language Models](/papers/frames2lora/) (arXiv 2026)
+- [CodeScout: Contextual Problem Statement Enhancement for Software Agents](/papers/codescout/) (ACL 2026 Findings 2026)
+- [Structured Uncertainty Guided Clarification for LLM Agents](/papers/sage-clarification/) (ACL 2026 Findings 2026)
+- [Follow the Flow: Fine-grained Flowchart Attribution with Neurosymbolic Agents](/papers/follow-the-flow/) (EMNLP 2025 2025)
+- [ChartLens: Fine-grained Visual Attribution in Charts](/papers/chartlens/) (ACL 2025 2025)
+- [VisDoM: Multi-Document QA with Visually Rich Elements Using Multimodal Retrieval-Augmented Generation](/papers/visdom/) (NAACL 2025 2025)
+- [DocEdit-v2: Document Structure Editing Via Multimodal LLM Grounding](/papers/docedit-v2/) (EMNLP 2024 2024)
+- [Doc2Command: Furthering Language Guided Document Editing](/papers/doc2command/) (ICLR 2024 2024)
+- [Trigger Warnings: A Computational Approach to Understanding User-Tagged Trigger Warnings](/papers/trigger-warnings/) (RANLP 2023 SRW 2023)
+- [WADER: A Weak-labelling framework for Data augmentation in tExt Regression Tasks](/papers/wader/) (SemEval 2023 2023)
+- [ACLM: A Selective-Denoising based Generative Data Augmentation Approach for Low-Resource Complex NER](/papers/aclm/) (ACL 2023 2023)
+- [The Geometry of Multilingual Language Models: A Fairness Lens](/papers/multilingual-geometry-fairness/) (ICLR 2023 Tiny Papers 2023)
+- [CoSyn: Detecting Implicit Hate Speech in Online Conversations Using a Context Synergized Hyperbolic Network](/papers/cosyn/) (EMNLP 2023 2023)
+- [Multimodal Analysis and Modality Fusion for Detection of Depression from Twitter Data](/papers/depression-twitter-multimodal/) (AI4SG @ AAAI 2023 2023)
+- [I Don't Feel so Good! Detecting Depressive Tendencies Using Transformer-Based Multimodal Frameworks](/papers/depression-transformer-multimodal/) (MLNLP 2022 2022)
+- [Multilingual Protest Event Detection using Transformer-based Models](/papers/protest-event-detection/) (CASE 2022 2022)
+- [A novel multimodal dynamic fusion network for disfluency detection in spoken utterances](/papers/disfluency-detection/) (arXiv 2022 2022)
+- [Multimodal BERT for Identifying Claims in Tweets](/papers/claim-detection-tweets/) (CLEF 2022 2022)
+- [Boosting Pre-trained Language Models with Task Specific Metadata and Cost Sensitive Learning](/papers/pcl-detection/) (SemEval-2022 2022)
+
 - [Blog](/blog/): explainers and notes
 - [News](/news/): dated updates
 - [CV](/cv/): PDF résumé
