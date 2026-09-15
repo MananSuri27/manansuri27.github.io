@@ -1,0 +1,12 @@
+          <div class="mentions">
+            {% if site.data.mentions and site.data.mentions.size > 0 -%}
+            <ul>
+              {%- for group in site.data.mentions %}
+              <li>
+                <strong>{{ group.paper }}</strong>:
+                {%- for item in group.items %} <a href="{{ item.url }}">{{ item.title }}</a>{% if item.note %} ({{ item.note }}){% endif %}{% unless forloop.last %};{% endunless %}{% endfor %}
+              </li>
+              {%- endfor %}
+            </ul>
+            {%- endif %}
+          </div>

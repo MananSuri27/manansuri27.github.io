@@ -1,0 +1,126 @@
+---
+layout: default
+---
+{%- comment -%} Per-paper page. Front matter fields: title, short_title, description, bibkey, authors[{name,url,equal,me}], affiliations, venue, venue_short, year, date, arxiv, pdf, code, website, checkpoints, dataset, hf_paper, press[{title,url,outlet}], figure, figure_caption, tldr, highlights[{value,label}], blog {%- endcomment -%}
+{%- assign fig_abs = page.figure | absolute_url -%}
+<div class="post paper">
+
+  <header class="paper-header">
+    <div class="paper-venue">{{ page.venue }}{% if page.year %} &middot; {{ page.year }}{% endif %}</div>
+    <h1 class="paper-title">{{ page.title }}</h1>
+    <p class="paper-authors">
+      {%- for a in page.authors -%}
+        {%- if a.url %}<a href="{{ a.url }}"{% if a.me %} class="me"{% endif %}>{{ a.name }}</a>{% else %}<span{% if a.me %} class="me"{% endif %}>{{ a.name }}</span>{% endif %}{% if a.equal %}<sup>*</sup>{% endif %}{% unless forloop.last %}, {% endunless %}
+      {%- endfor -%}
+    </p>
+    {%- if page.affiliations %}
+    <p class="paper-affiliations">{{ page.affiliations }}</p>
+    {%- endif %}
+    {%- assign has_equal = page.authors | where: "equal", true | size -%}
+    {%- if has_equal > 0 %}
+    <p class="paper-equal"><sup>*</sup>Equal contribution</p>
+    {%- endif %}
+
+    <div class="paper-links">
+      {%- if page.arxiv %}<a class="btn btn-sm z-depth-0" href="https://arxiv.org/abs/{{ page.arxiv }}"><i class="ai ai-arxiv"></i> arXiv</a>{% endif %}
+      {%- if page.pdf %}<a class="btn btn-sm z-depth-0" href="{{ page.pdf }}"><i class="fas fa-file-pdf"></i> PDF</a>{% endif %}
+      {%- if page.publisher_url %}<a class="btn btn-sm z-depth-0" href="{{ page.publisher_url }}"><i class="fas fa-book-open"></i> {{ page.publisher_label | default: "Proceedings" }}</a>{% endif %}
+      {%- if page.code %}<a class="btn btn-sm z-depth-0" href="{{ page.code }}"><i class="fab fa-github"></i> Code</a>{% endif %}
+      {%- if page.website %}<a class="btn btn-sm z-depth-0" href="{{ page.website }}"><i class="fas fa-globe"></i> Project page</a>{% endif %}
+      {%- if page.checkpoints %}<a class="btn btn-sm z-depth-0" href="{{ page.checkpoints }}"><i class="fas fa-cube"></i> Checkpoints</a>{% endif %}
+      {%- if page.dataset %}<a class="btn btn-sm z-depth-0" href="{{ page.dataset }}"><i class="fas fa-database"></i> Data</a>{% endif %}
+      {%- if page.hf_paper %}<a class="btn btn-sm z-depth-0" href="{{ page.hf_paper }}"><i class="fas fa-face-smile"></i> HF Papers</a>{% endif %}
+      {%- if page.blog %}<a class="btn btn-sm z-depth-0" href="{{ page.blog | relative_url }}"><i class="fas fa-pen-nib"></i> Explainer</a>{% endif %}
+      <a class="btn btn-sm z-depth-0" href="#citation"><i class="fas fa-quote-right"></i> Cite</a>
+    </div>
+  </header>
+
+  {%- if page.tldr %}
+  <div class="paper-tldr"><span class="paper-tldr-label">TL;DR</span> {{ page.tldr }}</div>
+  {%- endif %}
+
+  {%- if page.figure %}
+  <figure class="paper-hero">
+    <img src="{{ page.figure | relative_url }}" alt="{{ page.figure_alt | default: page.short_title | default: page.title }}" data-zoomable>
+    {%- if page.figure_caption %}<figcaption>{{ page.figure_caption }}</figcaption>{% endif %}
+  </figure>
+  {%- endif %}
+
+  {%- if page.demo %}
+  <div class="paper-demo">
+    {%- if page.demo contains ".mp4" %}
+    <video autoplay loop muted playsinline src="{{ page.demo | relative_url }}"></video>
+    {%- else %}
+    <img src="{{ page.demo | relative_url }}" alt="{{ page.demo_alt | default: 'Demo animation' }}" loading="lazy">
+    {%- endif %}
+    {%- if page.demo_caption %}<p class="table-note" style="text-align:center">{{ page.demo_caption }}</p>{% endif %}
+  </div>
+  {%- endif %}
+
+  {%- if page.highlights and page.highlights.size > 0 %}
+  <div class="paper-highlights">
+    {%- for h in page.highlights %}
+    <div class="paper-stat">
+      <div class="paper-stat-value">{{ h.value }}</div>
+      <div class="paper-stat-label">{{ h.label }}</div>
+    </div>
+    {%- endfor %}
+  </div>
+  {%- endif %}
+
+  <article class="paper-body post-content">
+    {{ content }}
+  </article>
+
+  {%- if page.press and page.press.size > 0 %}
+  <section class="paper-press">
+    <h2>Coverage</h2>
+    <ul>
+      {%- for p in page.press %}
+      <li><a href="{{ p.url }}">{{ p.title }}</a>{% if p.outlet %} &mdash; {{ p.outlet }}{% endif %}{% if p.date %}, {{ p.date }}{% endif %}</li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+
+  {%- if page.bibkey %}
+  <section class="paper-citation" id="citation">
+    <h2>Citation</h2>
+    <div class="paper-bibtex">
+      {% bibliography -f {{ site.scholar.bibliography }} -q @*[key={{ page.bibkey }}]* -T bib-raw -g none %}
+    </div>
+  </section>
+  {%- endif %}
+
+  <p class="paper-back"><a href="{{ '/publications/' | relative_url }}">&larr; All publications</a></p>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "@id": "{{ page.url | absolute_url }}",
+    "mainEntityOfPage": "{{ page.url | absolute_url }}",
+    "headline": {{ page.title | jsonify }},
+    "name": {{ page.title | jsonify }},
+    "abstract": {{ page.description | jsonify }},
+    "author": [
+      {%- for a in page.authors %}
+      {"@type": "Person", "name": {{ a.name | jsonify }}{% if a.url %}, "url": {{ a.url | absolute_url | jsonify }}{% endif %}{% if a.me %}, "@id": "{{ site.url }}/#person"{% endif %}}{% unless forloop.last %},{% endunless %}
+      {%- endfor %}
+    ],
+    "datePublished": "{{ page.date | date: '%Y-%m-%d' }}",
+    {%- if page.figure %}
+    "image": {{ fig_abs | jsonify }},
+    {%- endif %}
+    {%- if page.arxiv %}
+    "sameAs": ["https://arxiv.org/abs/{{ page.arxiv }}"{% if page.publisher_url %}, {{ page.publisher_url | jsonify }}{% endif %}],
+    "identifier": {"@type": "PropertyValue", "propertyID": "arXiv", "value": "{{ page.arxiv }}"},
+    {%- endif %}
+    {%- if page.venue %}
+    "isPartOf": {"@type": "PublicationEvent", "name": {{ page.venue | jsonify }}},
+    {%- endif %}
+    "publisher": {"@type": "Person", "name": "Manan Suri", "@id": "{{ site.url }}/#person"},
+    "url": "{{ page.url | absolute_url }}"
+  }
+  </script>
+</div>

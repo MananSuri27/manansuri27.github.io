@@ -32,7 +32,7 @@
         <!-- Entry bib key -->
         <div id="{{entry.key}}" class="col-sm-8">
         <!-- Title -->
-        <a href="{{entry.url}}"><div class="title">{{entry.title}}</div></a>
+        <a href="{% if entry.page %}{{ entry.page | relative_url }}{% else %}{{entry.url}}{% endif %}"><div class="title">{{entry.title}}</div></a>
         <!-- Author -->
         <div class="author">
         {% assign author_array_size = entry.author_array | size %}
@@ -186,6 +186,9 @@
           {%- endif %}
           {%- if entry.website %}
             <a href="{{ entry.website }}" class="btn btn-sm z-depth-0" role="button">Website</a>
+          {%- endif %}
+          {%- if entry.page %}
+            <a href="{{ entry.page | relative_url }}" class="btn btn-sm z-depth-0" role="button">Page</a>
           {%- endif %}
           {%- if entry.checkpoints %}
             <a href="{{ entry.checkpoints }}" class="btn btn-sm z-depth-0" role="button">Checkpoints</a>

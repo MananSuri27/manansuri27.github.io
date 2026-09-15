@@ -1,0 +1,13 @@
+          <div class="research-themes">
+            {%- for t in site.data.research %}
+            <div class="research-theme">
+              <h3>{{ t.theme }}</h3>
+              <p>{{ t.blurb }}</p>
+              <div class="research-papers">
+                {%- for p in t.papers %}
+                <a class="research-pill" href="{{ p.url | relative_url }}">{{ p.title }}<span>{{ p.venue }}</span></a>
+                {%- endfor %}
+              </div>
+            </div>
+            {%- endfor %}
+          </div>

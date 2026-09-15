@@ -1,0 +1,43 @@
+# Third-party mentions and reuse: awesome-lists, reimplementations, explainers.
+# Rendered by _includes/mentions.html on the homepage. Press coverage lives in press.yml.
+- paper: VisDoM
+  items:
+    - title: Awesome-Multimodal-RAG
+      url: https://github.com/JarvisUSTC/Awesome-Multimodal-RAG
+      note: curated list
+    - title: awesome-data-agents
+      url: https://github.com/HKUSTDial/awesome-data-agents
+      note: curated list
+    - title: video explainer
+      url: https://www.youtube.com/watch?v=H0pp2PBaZpw
+      note: AI Papers channel
+- paper: ChartLens
+  items:
+    - title: LLM-Visualization-Paper-List
+      url: https://github.com/zengxingchen/LLM-Visualization-Paper-List
+      note: curated list
+    - title: awesome-data-agents
+      url: https://github.com/HKUSTDial/awesome-data-agents
+      note: curated list
+    - title: paper note
+      url: https://en.papernotes.org/ACL2025/llm_nlp/chartlens_fine-grained_visual_attribution_in_charts/
+      note: papernotes.org
+- paper: Structured Uncertainty Guided Clarification
+  items:
+    - title: third-party evaluation of SAGE and ClarifyBench
+      url: https://github.com/rvz16/agents_with_uncertainty_research
+      note: independent reimplementation
+    - title: Adobe Research
+      url: https://research.adobe.com/publication/structured-uncertainty-guided-clarification-for-llm-agents/
+- paper: CodeScout
+  items:
+    - title: Amazon Science
+      url: https://www.amazon.science/publications/codescout-contextual-problem-statement-enhancement-for-software-agents
+- paper: Follow the Flow
+  items:
+    - title: Adobe Research
+      url: https://research.adobe.com/publication/follow-the-flow-fine-grained-flowchart-attribution-with-neurosymbolic-agents/
+- paper: CyberForge
+  items:
+    - title: CyberForge datasets on Hugging Face
+      url: https://huggingface.co/datasets/AmL-hug/cyberforge-projects

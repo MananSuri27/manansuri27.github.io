@@ -15,6 +15,11 @@ Identifiers: ORCID https://orcid.org/{{ site.orcid_id }} · Google Scholar https
 
 - [About](/): bio, news, press, talks, service
 - [Publications](/publications/): all papers with abstracts, PDF, code, and bibtex
+- Paper pages (one page per paper with abstract, figure, results, links, and bibtex):
+{% assign papers = site.papers | sort: "date" | reverse -%}
+{% for p in papers -%}
+  - [{{ p.title }}]({{ p.url }}) ({{ p.venue_short }} {{ p.year }})
+{% endfor %}
 - [Blog](/blog/): explainers and notes
 - [News](/news/): dated updates
 - [CV](/cv/): PDF résumé

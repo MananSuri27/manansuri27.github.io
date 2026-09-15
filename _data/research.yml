@@ -1,0 +1,41 @@
+# Research themes shown on the homepage (rendered by _includes/research.html).
+# Each paper links to its on-site page under /papers/.
+- theme: Trust and attribution
+  blurb: Making agent outputs verifiable by grounding them in the exact chart elements, flowchart paths, and document regions that support them, and asking the right clarifying question when the request itself is ambiguous.
+  papers:
+    - title: ChartLens
+      url: /papers/chartlens/
+      venue: ACL 2025
+    - title: Follow the Flow
+      url: /papers/follow-the-flow/
+      venue: EMNLP 2025
+    - title: VisDoM
+      url: /papers/visdom/
+      venue: NAACL 2025
+    - title: SAGE-Agent / ClarifyBench
+      url: /papers/sage-clarification/
+      venue: ACL 2026
+    - title: DocEdit-v2
+      url: /papers/docedit-v2/
+      venue: EMNLP 2024
+- theme: Efficient context and parametric memory
+  blurb: Distilling long multimodal context (video, audio-visual streams) into reusable LoRA adapters so a frozen model can answer repeated queries with zero context tokens.
+  papers:
+    - title: Frames2LoRA
+      url: /papers/frames2lora/
+      venue: arXiv 2026
+    - title: Omni2LoRA
+      url: /papers/omni2lora/
+      venue: arXiv 2026
+- theme: Data and benchmarks for agents
+  blurb: Building the training corpora and evaluations agents actually need, from verified vulnerability-injection data for security agents to better problem statements for software agents.
+  papers:
+    - title: CyberForge
+      url: /papers/cyberforge/
+      venue: arXiv 2026
+    - title: CodeScout
+      url: /papers/codescout/
+      venue: ACL 2026
+    - title: ACLM
+      url: /papers/aclm/
+      venue: ACL 2023
