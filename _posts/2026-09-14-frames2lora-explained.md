@@ -596,7 +596,7 @@ The rank directions are redundant but not interchangeable. Ranking each rank sli
 ## Try it
 
 - Paper page on this site: [/papers/frames2lora/](/papers/frames2lora/)
-- arXiv: [2606.04351](https://arxiv.org/abs/2606.04351) (v1 was titled Video2LoRA)
+- arXiv: [2606.04351](https://arxiv.org/abs/2606.04351)
 - Code: [github.com/frames2lora/Frames2LoRA](https://github.com/frames2lora/Frames2LoRA)
 - Checkpoints: [Frames2LoRA-SmolVLM-ckpts on Hugging Face](https://huggingface.co/MananSuri27/Frames2LoRA-SmolVLM-ckpts)
 - Project page with the qualitative-example explorer: [frames2lora.github.io](https://frames2lora.github.io/)

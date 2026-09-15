@@ -50,7 +50,6 @@ og_image: https://manansuri.com/assets/img/papers/frames2lora/hero.png
 ---
 ## Abstract
 
-Formerly titled Video2LoRA (arXiv v1).
 
 Processing video in vision-language models is expensive: each frame occupies hundreds of tokens, and inference cost scales with every frame and every repeated query. We introduce Frames2LoRA, a method for parametric video internalization. A perceiver hypernetwork reads the intermediate representations produced layer-by-layer as a frozen VLM encodes a video, and generates a Low-Rank Adaptation (LoRA) adapter in a single forward pass. Unlike standard LoRA fine-tuning, which requires iterative gradient updates, Frames2LoRA predicts these weights directly from the video.
 
