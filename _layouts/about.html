@@ -47,6 +47,18 @@ layout: default
             {%- include news.html limit=true %}
           {%- endif %}
 
+          <!-- Press -->
+          {% if page.press -%}
+            <h2>press</h2>
+            {%- include press.html %}
+          {%- endif %}
+
+          <!-- Service -->
+          {% if page.service -%}
+            <h2>service</h2>
+            {%- include service.html %}
+          {%- endif %}
+
           <!-- Latest posts -->
           {% if page.latest_posts -%}
             <h2><a href="{{ '/blog/' | relative_url }}" style="color: inherit;">latest posts</a></h2>

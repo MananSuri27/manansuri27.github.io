@@ -1,0 +1,8 @@
+# Academic service. Rendered by _includes/service.html on the homepage.
+- role: Workshop organizer
+  items:
+    - text: "<a href=\"https://raraworkshop.github.io/\">RARA</a>: Grounding Documents with Reasoning, Agents, Retrieval, and Attribution &mdash; ICDM 2025"
+- role: Reviewer
+  items:
+    - text: "ACL Rolling Review (October 2024 cycle)"
+    - text: "ICASSP 2025"

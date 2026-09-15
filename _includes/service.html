@@ -1,0 +1,12 @@
+          <div class="service">
+            {% if site.data.service and site.data.service.size > 0 -%}
+            <ul>
+              {%- for group in site.data.service %}
+              <li>
+                <strong>{{ group.role }}</strong>:
+                {%- for item in group.items %} {{ item.text }}{% unless forloop.last %};{% endunless %}{% endfor %}
+              </li>
+              {%- endfor %}
+            </ul>
+            {%- endif %}
+          </div>

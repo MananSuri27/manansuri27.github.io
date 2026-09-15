@@ -548,6 +548,18 @@ footer.sticky-bottom {
 
 // Publications
 
+.press,
+.service {
+  ul {
+    padding-left: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.4rem;
+  }
+}
+
 .publications {
   margin-top: 2rem;
 
@@ -593,6 +605,13 @@ footer.sticky-bottom {
       .abbr {
         height: 2rem;
         margin-bottom: 0.5rem;
+
+        // An entry without a venue badge used to leave an empty 2.5rem block
+        // above it (a blank "ghost" row, most visible on phones).
+        &:empty {
+          height: 0;
+          margin-bottom: 0;
+        }
 
         abbr {
           display: inline-block;

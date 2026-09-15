@@ -1,6 +1,25 @@
-"AJP":
-  url: https://aapt.scitation.org/journal/ajp
-  color: "#00369f"
-
-"PhysRev":
-  url: https://journals.aps.org/
+# Venue badges shown next to each publication (used by _layouts/bib.html via the
+# `abbr` bibtex field). Colors are optional; the theme color is used otherwise.
+"ACL":
+  url: https://aclanthology.org/
+"EMNLP":
+  url: https://aclanthology.org/
+"NAACL":
+  url: https://aclanthology.org/
+"SemEval":
+  url: https://semeval.github.io/
+"CASE":
+  url: https://aclanthology.org/
+"RANLP":
+  url: https://aclanthology.org/
+"ICLR":
+  url: https://iclr.cc/
+"AAAI":
+  url: https://aaai.org/
+"ACM":
+  url: https://dl.acm.org/
+"CLEF":
+  url: https://www.clef-initiative.eu/
+"arXiv":
+  url: https://arxiv.org/
+  color: "#b31b1b"

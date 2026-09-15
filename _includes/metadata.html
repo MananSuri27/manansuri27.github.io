@@ -17,9 +17,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {%- capture fullname -%}{{ site.first_name }} {{ site.middle_name }} {{ site.last_name }}{%- endcapture -%}
+    {%- assign fullname = fullname | replace: "  ", " " | strip -%}
     <title>
     {%- if site.title == "blank" -%}
-        {%- capture title -%}{{ site.first_name }} {{ site.middle_name }} {{ site.last_name }}{%- endcapture -%}
+        {%- capture title -%}{{ fullname }}{%- endcapture -%}
     {%- else -%}
         {%- capture title -%}{{ site.title }}{%- endcapture -%}
     {%- endif -%}
@@ -35,7 +37,7 @@
         {{ title }}
     {%- endif -%}
     </title>
-    <meta name="author" content="{{ site.first_name }} {{ site.middle_name }} {{ site.last_name }}" />
+    <meta name="author" content="{{ fullname }}" />
     <meta name="description" content="{%- if page.description -%}{{ page.description }}{%- else -%}{{ site.description }}{%- endif -%}" />
 {%- if page.keywords or site.keywords %}
     <meta name="keywords" content="{%- if page.keywords -%}{{ page.keywords }}{%- else -%}{{ site.keywords }}{%- endif -%}" />
@@ -52,7 +54,7 @@
     <!-- OpenGraph -->
     <meta property="og:site_name" content="{{ title }}" />
     <meta property="og:type" content="{%- if is_blog_post -%}article{%- else -%}website{%- endif -%}" />
-    <meta property="og:title" content="{%- if page.title -%}{{ title }} | {{ page.title }}{%- else -%}{{ title }}{%- endif -%}" />
+    <meta property="og:title" content="{%- if page.title and page.url != "/" -%}{{ page.title }} | {{ title }}{%- else -%}{{ title }}{%- endif -%}" />
     <meta property="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url | remove_first: 'index.html' }}" />
     <meta property="og:description" content="{%- if page.description -%}{{ page.description }}{%- else -%}{{ site.description }}{%- endif -%}" />
     {% if page.og_image or site.og_image -%}
@@ -62,7 +64,7 @@
 
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="{%- if page.title -%}{{ page.title }}{%- else -%}{{ title }}{%- endif -%}" />
+    <meta name="twitter:title" content="{%- if page.title and page.url != "/" -%}{{ page.title }} | {{ title }}{%- else -%}{{ title }}{%- endif -%}" />
     <meta name="twitter:description" content="{%- if page.description -%}{{ page.description }}{%- else -%}{{ site.description }}{%- endif -%}" />
     {% if page.og_image or site.og_image -%}
     <meta name="twitter:image" content="{%- if page.og_image -%}{{ page.og_image }}{%- else -%}{{ site.og_image }}{%- endif -%}" />
@@ -123,7 +125,7 @@
         {%- assign sameaslinks = sameaslinks | push: link -%}
     {%- endif -%}
     {%- if site.twitter_username -%}
-        {%- capture link -%}https://twitter.com/{{ site.twitter_username }}{%- endcapture -%}
+        {%- capture link -%}https://x.com/{{ site.twitter_username }}{%- endcapture -%}
         {%- assign sameaslinks = sameaslinks | push: link -%}
     {%- endif -%}
     {%- if site.mastodon_username -%}
@@ -218,12 +220,39 @@
         {%- assign sameaslinks = sameaslinks | split: "" -%}
     {%- endif -%}
 
+    {%- if page.url == "/" %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "{{ fullname }}",
+        "givenName": "{{ site.first_name }}",
+        "familyName": "{{ site.last_name }}",
+        "url": "{{ site.url }}{{ site.baseurl }}/",
+        "image": "{{ site.og_image }}",
+        "jobTitle": "PhD student in Computer Science",
+        "affiliation": {
+            "@type": "CollegeOrUniversity",
+            "name": "University of Maryland, College Park",
+            "url": "https://www.cs.umd.edu/"
+        },
+        "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Netaji Subhas University of Technology"
+        },
+        "knowsAbout": ["LLM agents", "natural language processing", "multimodal attribution", "parametric memory", "LoRA", "machine learning"],
+        {% if sameaslinks != blank -%}
+        "sameAs": {{ sameaslinks }}
+        {%- endif %}
+    }
+    </script>
+    {%- endif %}
     <script type="application/ld+json">
     {
         "author":
         {
             "@type": "Person",
-            "name": "{{ site.first_name }} {{ site.middle_name }} {{ site.last_name }}"
+            "name": "{{ fullname }}"
         },
         "url": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
         "@type": "{%- if is_blog_post -%}BlogPosting{%- else -%}WebSite{%- endif -%}",
@@ -232,7 +261,7 @@
         {% if sameaslinks != blank -%}
         "sameAs": {{ sameaslinks }},
         {%- endif %}
-        "name": "{{ site.first_name }} {{ site.middle_name }} {{ site.last_name }}",
+        "name": "{{ fullname }}",
         "@context": "https://schema.org"
     }
     </script>

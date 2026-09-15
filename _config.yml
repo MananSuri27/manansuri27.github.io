@@ -8,12 +8,12 @@ middle_name:
 last_name: Suri
 email: manansuri27@gmail.com
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Computer Engineering Senior, Interested in AI, Data, and Software
+  Manan Suri is a Computer Science PhD student at the University of Maryland working on LLM agents: trustworthy context use, efficient parametric memory, and the benchmarks agents need.
 footer_text: 
   # Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
   # Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
   # Photos from <a href="https://unsplash.com" target="_blank">Unsplash</a>.
-keywords: ai, data science, software  # add your own keywords or leave empty
+keywords: Manan Suri, LLM agents, AI agents, machine learning, UMD, natural language processing, LoRA, benchmark, computer science
 
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: 🌀  # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
@@ -63,9 +63,9 @@ max_width: 800px
 # Open Graph & Schema.org
 # -----------------------------------------------------------------------------
 # Display links to the page with a preview object on social media.
-serve_og_meta: false # Include Open Graph meta tags in the HTML head
-serve_schema_org: false # Include Schema.org in the HTML head
-og_image: # The site-wide (default for all links) Open Graph preview image
+serve_og_meta: true # Include Open Graph meta tags in the HTML head
+serve_schema_org: true # Include Schema.org in the HTML head
+og_image: https://manansuri.com/assets/img/manansuri.jpeg # The site-wide (default for all links) Open Graph preview image
 
 # -----------------------------------------------------------------------------
 # Social integration
@@ -73,15 +73,15 @@ og_image: # The site-wide (default for all links) Open Graph preview image
 
 github_username: MananSuri27 # your GitHub user name
 gitlab_username: # your GitLab user name
-twitter_username: # your Twitter handle
+twitter_username: mananifesto # your Twitter handle
 mastodon_username: # your mastodon instance+username in the format instance.tld/@username
 linkedin_username: manansuri27 # your LinkedIn user name
 telegram_username: # your Telegram user name
 scholar_userid: KbVluf4AAAAJ # your Google Scholar ID
-semanticscholar_id: # your Semantic Scholar ID
+semanticscholar_id: 145282060 # your Semantic Scholar ID
 whatsapp_number: # your WhatsApp number (full phone number in international format. Omit any zeroes, brackets, or dashes when adding the phone number in international format.)
-orcid_id: # your ORCID ID
-medium_username: # your Medium username
+orcid_id: 0000-0001-5089-2658 # your ORCID ID
+medium_username: manansuri # your Medium username
 quora_username: # your Quora username
 publons_id: # your ID on Publons
 lattes_id: # your ID on Lattes (Brazilian Lattes CV)
@@ -107,7 +107,7 @@ discord_id: # your discord id (18-digit unique numerical identifier)
 zotero_username: # your zotero username
 
 contact_note: >
-  Drop me an email, or say hi on LinkedIn!
+  Drop me an email, or say hi on LinkedIn or X!
 
 # -----------------------------------------------------------------------------
 # Analytics and search engine verification
@@ -123,9 +123,9 @@ bing_site_verification:  # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: Manan Suri's blog # blog_name will be displayed in your blog page
-# blog_nav_title: blog # your blog must have a title for it to be displayed in the nav bar
-blog_description: a simple whitespace theme for academics
+blog_name: blog # blog_name will be displayed in your blog page
+blog_nav_title: blog # your blog must have a title for it to be displayed in the nav bar
+blog_description: notes on NLP, agents, and things I wanted explained simply
 permalink: /blog/:year/:title/
 
 # Pagination
@@ -159,9 +159,9 @@ related_blog_posts:
 # External sources.
 # If you have blog posts published on medium.com or other external sources,
 # you can display them in your blog by adding a link to the RSS feed.
+# (Medium posts are migrated into _posts/ so they are not pulled in here; this
+#  avoids duplicate entries and lets manansuri.com be the canonical copy.)
 external_sources:
-  - name: medium.com
-    rss_url: https://medium.com/@manansuri/feed
 
 # -----------------------------------------------------------------------------
 # Collections
@@ -265,8 +265,8 @@ jekyll-archives:
     tag: '/blog/tag/:name/'
     category: '/blog/category/:name/'
 
-display_tags: ['formatting', 'images', 'links', 'math', 'code'] # these tags will be displayed on the front page of your blog
-display_categories: ['blockquotes'] # these categories will be displayed on the front page of your blog
+display_tags: ['nlp', 'embeddings', 'tutorial'] # these tags will be displayed on the front page of your blog
+display_categories: [] # these categories will be displayed on the front page of your blog
 
 # -----------------------------------------------------------------------------
 # Jekyll Scholar
@@ -304,7 +304,7 @@ badges: # Display different badges for your publications
   dimensions_badge: false # Dimensions badge (https://badge.dimensions.ai/)
 
 # Filter out certain bibtex entry keywords used internally from the bib output
-filtered_bibtex_keywords: [abbr, abstract, arxiv, bibtex_show, html, pdf, selected, supp, blog, code, poster, slides, website, preview, altmetric]
+filtered_bibtex_keywords: [abbr, abstract, arxiv, bibtex_show, html, pdf, selected, supp, blog, code, poster, slides, website, preview, altmetric, checkpoints, press]
 
 # Maximum number of authors to be shown for each publication (more authors are visible on click)
 max_author_limit:   # leave blank to always show all authors

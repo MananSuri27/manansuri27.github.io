@@ -1,0 +1,11 @@
+# Press coverage, newest first. Rendered by _includes/press.html on the homepage.
+- title: "When AI Goes on Defense"
+  url: https://www.cs.umd.edu/article/2026/09/when-ai-goes-defense
+  outlet: UMD Department of Computer Science
+  date: September 2026
+  summary: "On CyberForge: generating verified vulnerability-injection training data for cybersecurity agents."
+- title: "Teaching AI to See Faster"
+  url: https://www.cs.umd.edu/article/2026/07/teaching-ai-see-faster
+  outlet: UMD Department of Computer Science
+  date: July 2026
+  summary: "On Frames2LoRA: turning a video into a LoRA adapter so a vision-language model can answer with zero visual tokens in context."

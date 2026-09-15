@@ -2,6 +2,7 @@ github_users:
   # - manansuri27
 
 github_repos:
+  - frames2lora/Frames2LoRA
   - MananSuri27/nanovector
   - MananSuri27/CoSyn
   - MananSuri27/Article
@@ -15,7 +16,6 @@ github_repos:
   - MananSuri27/TinyMLParking
   - MananSuri27/draiw
   - MananSuri27/CPUSchedulingAlgorithms
-  - MananSuri27/MultimodalTweetAnalysis
   - MananSuri27/Word2Vec-NLP
   - MananSuri27/VanillaJS-Apps
   

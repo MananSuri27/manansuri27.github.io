@@ -1,0 +1,12 @@
+          <div class="press">
+            {% if site.data.press and site.data.press.size > 0 -%}
+            <ul>
+              {%- for item in site.data.press %}
+              <li>
+                <a href="{{ item.url }}">{{ item.title }}</a> &mdash; {{ item.outlet }}{% if item.date %}, {{ item.date }}{% endif %}.
+                {%- if item.summary %} {{ item.summary }}{% endif %}
+              </li>
+              {%- endfor %}
+            </ul>
+            {%- endif %}
+          </div>
