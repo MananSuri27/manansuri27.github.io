@@ -245,6 +245,11 @@ plugins:
   - jekyll-twitter-plugin
   - jemoji
 
+# Table of contents (jekyll-toc): headings h2-h3 only, so walkthrough steps (h4) stay out of the TOC
+toc:
+  min_level: 2
+  max_level: 3
+
 # Sitemap settings
 defaults:
   - scope:

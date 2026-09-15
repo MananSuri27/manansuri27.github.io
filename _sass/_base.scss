@@ -1462,3 +1462,194 @@ nav[data-toggle="toc"] {
     animation: none !important;
   }
 }
+
+/*******************************************************************************
+ * Illustrated explainers: walkthrough stepper, token chips, callouts
+ ******************************************************************************/
+
+.walkthrough {
+  border: 1px solid var(--global-divider-color);
+  border-radius: 10px;
+  padding: 1rem 1.1rem 0.75rem;
+  margin: 1.5rem 0;
+  background: var(--global-card-bg-color);
+  outline: none;
+
+  .wt-title {
+    font-weight: 600;
+    color: var(--global-theme-color);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .wt-step {
+    margin-bottom: 1rem;
+
+    > h4,
+    > .wt-heading {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      color: var(--global-text-color);
+      font-family: "Roboto", sans-serif;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &.wt-ready .wt-step {
+    display: none;
+    animation: wt-fade 0.35s ease;
+
+    &.wt-active {
+      display: block;
+    }
+  }
+
+  .wt-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-top: 1px solid var(--global-divider-color);
+    padding-top: 0.6rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .wt-btn {
+    background: none;
+    border: 1px solid var(--global-text-color);
+    color: var(--global-text-color);
+    border-radius: 999px;
+    padding: 0.2rem 0.8rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--global-theme-color);
+      color: var(--global-theme-color);
+    }
+  }
+
+  .wt-dots {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .wt-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--global-text-color-light);
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+
+    &.wt-active {
+      background: var(--global-theme-color);
+      border-color: var(--global-theme-color);
+    }
+  }
+
+  .wt-label {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--global-text-color-light);
+  }
+}
+
+@keyframes wt-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+.tok-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.6rem 0;
+
+  .tok-arrow {
+    color: var(--global-text-color-light);
+    padding: 0 0.2rem;
+  }
+}
+
+.tok {
+  display: inline-block;
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.85rem;
+  font-family: "Roboto Mono", "SFMono-Regular", Menlo, monospace;
+  border: 1px solid transparent;
+  background: rgba(130, 130, 130, 0.15);
+  color: var(--global-text-color);
+
+  &.tok-a { background: rgba(181, 9, 172, 0.15); border-color: rgba(181, 9, 172, 0.5); }
+  &.tok-b { background: rgba(38, 152, 186, 0.15); border-color: rgba(38, 152, 186, 0.5); }
+  &.tok-c { background: rgba(0, 171, 55, 0.15); border-color: rgba(0, 171, 55, 0.5); }
+  &.tok-d { background: rgba(242, 145, 5, 0.15); border-color: rgba(242, 145, 5, 0.5); }
+  &.tok-x { text-decoration: line-through; opacity: 0.6; }
+  &.tok-hl { box-shadow: 0 0 0 2px var(--global-theme-color); }
+}
+
+.callout {
+  border-left: 4px solid var(--global-theme-color);
+  background: var(--global-code-bg-color);
+  padding: 0.7rem 1rem;
+  margin: 1rem 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.95rem;
+
+  .callout-label {
+    color: var(--global-theme-color);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.notation {
+  font-size: 0.9rem;
+
+  td:first-child {
+    font-family: "Roboto Mono", Menlo, monospace;
+    white-space: nowrap;
+  }
+}
+
+.post .post-content {
+  .fig-svg {
+    margin: 1.25rem 0;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      color: var(--global-text-color);
+      font-family: "Roboto", sans-serif;
+    }
+
+    .fig-caption {
+      color: var(--global-text-color-light);
+      font-size: 0.85rem;
+      margin-top: 0.4rem;
+      text-align: center;
+    }
+  }
+}

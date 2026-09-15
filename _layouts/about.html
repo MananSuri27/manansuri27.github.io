@@ -60,12 +60,6 @@ layout: default
             {%- include press.html %}
           {%- endif %}
 
-          <!-- Mentions -->
-          {% if page.mentions -%}
-            <h2>mentions</h2>
-            {%- include mentions.html %}
-          {%- endif %}
-
           <!-- Talks -->
           {% if page.talks -%}
             <h2>talks</h2>
@@ -88,6 +82,12 @@ layout: default
           {% if page.selected_papers -%}
             <h2><a href="{{ '/publications/' | relative_url }}" style="color: inherit;">selected publications</a></h2>
             {%- include selected_papers.html %}
+          {%- endif %}
+
+          <!-- Mentions -->
+          {% if page.mentions -%}
+            <h2>mentions</h2>
+            {%- include mentions.html %}
           {%- endif %}
 
           <!-- Social -->

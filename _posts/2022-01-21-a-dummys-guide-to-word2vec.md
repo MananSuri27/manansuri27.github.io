@@ -5,7 +5,7 @@ description: "What word embeddings are, how Word2Vec learns them (CBOW and skip-
 date: 2022-01-21 12:06:00
 tags: nlp embeddings tutorial
 categories: tutorials
-featured: true
+featured: false
 thumbnail: assets/img/blog/word2vec/cover.jpg
 related_posts: false
 toc:

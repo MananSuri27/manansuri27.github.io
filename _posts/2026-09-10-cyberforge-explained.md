@@ -1,0 +1,513 @@
+---
+layout: post
+title: "Manufacturing bugs that survive the test suite: CyberForge explained"
+description: "How CyberForge injects execution-verified vulnerabilities into real C/C++ repositories, and what training on them does to a security agent."
+date: 2026-09-10 12:00:00
+tags: security agents datasets nist
+categories: research
+thumbnail: assets/img/papers/cyberforge/hero.png
+related_posts: false
+toc:
+  beginning: true
+---
+
+Guetzli is Google's JPEG compressor. When its parser meets a metadata segment, it reads the segment's declared length and, before copying anything, checks that the file actually holds that many bytes. Delete that one check and run the project's test suite: 10 of 10 tests pass. Nothing in the repository notices. Now hand the modified binary a 504-byte JPEG whose length field says 65,535, and AddressSanitizer reports a heap-buffer-overflow in `ProcessAPP`. That is a security weakness in the sense that matters: invisible to the tests, real under a crafted input.
+
+Software-engineering agents improved by double digits once thousands of real repositories were packaged with reproducible builds and tests. Security agents never got that corpus, because a functional bug is easy to verify (a test fails) while a security weakness has to do the opposite: stay latent under the existing tests and surface only under adversarial input. Existing runnable vulnerability datasets are mined from disclosed CVEs, so they grow at the rate humans find and publish bugs. [CyberForge](/papers/cyberforge/) is our attempt to manufacture that data instead. I worked on it with Amine Lbath and colleagues during a NIST PREP fellowship in spring 2026, with Dinesh Manocha at UMD; Amine and I share first authorship. This post traces a single guetzli instance from the released corpus, `guetzli/vulnerability_FZ_24`, through every stage of the pipeline.
+
+## The idea in one picture
+
+The SWE-Smith family of bug-injection pipelines accepts an edit once a unit test fails. CyberForge flips the criterion: an edit is accepted only if every unit test still passes *and* a proof-of-vulnerability input (PoV) crashes the injected build but not the clean one. Neither half means anything alone, so the oracle checks the injection and the PoV jointly.
+
+<div class="fig-svg">
+<svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Contrast between a functional-bug oracle, which accepts an edit once a unit test fails, and the CyberForge oracle, which accepts an edit only if every unit test still passes and a proof-of-vulnerability input crashes the injected build but not the clean build.">
+  <style>
+    .n { fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .t { fill: currentColor; font-size: 14px; }
+    .h { fill: currentColor; font-size: 15px; font-weight: 600; }
+    .s { fill: currentColor; font-size: 12px; opacity: 0.75; }
+    .ar { fill: none; stroke: currentColor; stroke-width: 1.5; }
+  </style>
+  <defs>
+    <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+  </defs>
+  <text class="h" x="225" y="30" text-anchor="middle">Functional bug (SWE-Smith style)</text>
+  <text class="h" x="675" y="30" text-anchor="middle">Latent weakness (CyberForge)</text>
+  <line x1="450" y1="15" x2="450" y2="290" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+
+  <rect class="n" x="125" y="55" width="200" height="46" rx="10" opacity="0.7"/>
+  <text class="t" x="225" y="83" text-anchor="middle">one edit to the project</text>
+  <path class="ar" d="M225,101 L225,138" marker-end="url(#a1)"/>
+  <rect class="n" x="125" y="140" width="200" height="46" rx="10" stroke="#F29105" stroke-width="2"/>
+  <text class="t" x="225" y="168" text-anchor="middle">a unit test fails</text>
+  <path class="ar" d="M225,186 L225,223" marker-end="url(#a1)"/>
+  <rect class="n" x="125" y="225" width="200" height="46" rx="10" opacity="0.7"/>
+  <text class="t" x="225" y="253" text-anchor="middle">bug accepted</text>
+  <text class="s" x="225" y="290" text-anchor="middle">the test suite is the oracle</text>
+
+  <rect class="n" x="575" y="55" width="200" height="46" rx="10" opacity="0.7"/>
+  <text class="t" x="675" y="83" text-anchor="middle">one edit to the project</text>
+  <path class="ar" d="M675,101 C675,120 555,118 555,138" marker-end="url(#a1)"/>
+  <path class="ar" d="M675,101 C675,120 795,118 795,138" marker-end="url(#a1)"/>
+  <rect class="n" x="465" y="140" width="180" height="60" rx="10" stroke="#00ab37" stroke-width="2"/>
+  <text class="t" x="555" y="165" text-anchor="middle">every unit test</text>
+  <text class="t" x="555" y="184" text-anchor="middle">still passes</text>
+  <text class="h" x="675" y="175" text-anchor="middle" fill="#B509AC">AND</text>
+  <rect class="n" x="705" y="140" width="180" height="60" rx="10" stroke="#B509AC" stroke-width="2"/>
+  <text class="t" x="795" y="165" text-anchor="middle">PoV crashes injected</text>
+  <text class="t" x="795" y="184" text-anchor="middle">build, not clean build</text>
+  <path class="ar" d="M555,200 C555,220 675,218 675,223" marker-end="url(#a1)"/>
+  <path class="ar" d="M795,200 C795,220 675,218 675,223" marker-end="url(#a1)"/>
+  <rect class="n" x="575" y="225" width="200" height="46" rx="10" stroke="#B509AC" stroke-width="2"/>
+  <text class="t" x="675" y="253" text-anchor="middle">weakness accepted</text>
+  <text class="s" x="675" y="290" text-anchor="middle">tests must stay green; a crafted input is the oracle</text>
+</svg>
+<div class="fig-caption">Left: a functional-bug oracle uses the test suite as its judge. Right: CyberForge requires the tests to stay green and uses a crafted input, run differentially against the clean and injected builds, as its judge.</div>
+</div>
+
+<div class="callout"><span class="callout-label">Key idea</span>Instead of mining vulnerabilities from disclosure, create them: let an agent weaken a real check in a real project, then admit the instance only by execution, never by reading the diff. Corpus growth then depends on compute, not on CVE publication.</div>
+
+## Walkthrough: one guetzli bug, from injection to training signal
+
+Everything below is the actual instance `guetzli/vulnerability_FZ_24`, produced by the fuzzer-guided pipeline (`"producer": "fuzz_poc_guided"`) and labeled CWE-125, an out-of-bounds read.
+
+<div class="walkthrough" markdown="1">
+<div class="wt-title">Walkthrough: guetzli/vulnerability_FZ_24, end to end</div>
+<div class="wt-step" data-label="Project qualifies" markdown="1">
+<h4>1. The project qualifies</h4>
+<div class="fig-svg">
+<svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An OSS-Fuzz project, guetzli, ships a Docker image, build script, sanitizers, harnesses and unit tests; its tests are run five times unattended and must pass at 100 percent every time; flaky projects are rejected and 100 projects qualify.">
+  <style>
+    .n { fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .t { fill: currentColor; font-size: 14px; }
+    .h { fill: currentColor; font-size: 15px; font-weight: 600; }
+    .s { fill: currentColor; font-size: 12px; opacity: 0.75; }
+    .ar { fill: none; stroke: currentColor; stroke-width: 1.5; }
+  </style>
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+  </defs>
+  <rect class="n" x="20" y="40" width="230" height="170" rx="10" stroke="#2698BA" stroke-width="2"/>
+  <text class="h" x="135" y="66" text-anchor="middle">guetzli (OSS-Fuzz)</text>
+  <text class="s" x="135" y="84" text-anchor="middle">Google's JPEG compressor, C++</text>
+  <text class="t" x="40" y="112">Dockerfile + build.sh</text>
+  <text class="t" x="40" y="134">ASAN / UBSAN instrumented</text>
+  <text class="t" x="40" y="156">libFuzzer harnesses</text>
+  <text class="t" x="40" y="178">unit tests (10)</text>
+  <text class="s" x="40" y="198">no project-specific build logic written</text>
+
+  <path class="ar" d="M250,125 L298,125" marker-end="url(#a2)"/>
+
+  <rect class="n" x="300" y="40" width="300" height="170" rx="10"/>
+  <text class="h" x="450" y="66" text-anchor="middle">5 unattended test runs</text>
+  <text class="s" x="450" y="84" text-anchor="middle">on the unmodified code</text>
+  <g fill="#00ab37">
+    <circle cx="350" cy="130" r="18"/><circle cx="400" cy="130" r="18"/><circle cx="450" cy="130" r="18"/><circle cx="500" cy="130" r="18"/><circle cx="550" cy="130" r="18"/>
+  </g>
+  <g fill="#fff" font-size="16" font-weight="700" text-anchor="middle">
+    <text x="350" y="136">✓</text><text x="400" y="136">✓</text><text x="450" y="136">✓</text><text x="500" y="136">✓</text><text x="550" y="136">✓</text>
+  </g>
+  <text class="t" x="450" y="175" text-anchor="middle">100% pass, identical results, 5 / 5</text>
+  <text class="s" x="450" y="196" text-anchor="middle">any flake → project rejected</text>
+
+  <path class="ar" d="M600,125 L648,125" marker-end="url(#a2)"/>
+
+  <rect class="n" x="650" y="40" width="230" height="170" rx="10" stroke="#B509AC" stroke-width="2"/>
+  <text class="h" x="765" y="66" text-anchor="middle">qualified pool</text>
+  <text class="t" x="765" y="104" text-anchor="middle">100 projects qualify</text>
+  <text class="t" x="765" y="126" text-anchor="middle">80 end up contributing</text>
+  <text class="t" x="765" y="148" text-anchor="middle">at least one instance</text>
+  <text class="s" x="765" y="180" text-anchor="middle">73 C++ projects, 27 C projects</text>
+  <text class="s" x="450" y="238" text-anchor="middle">Step 1 · admission of the project, before any edit is made</text>
+</svg>
+</div>
+
+We start from C and C++ projects enrolled in OSS-Fuzz, because each already ships a Docker image, a `build.sh`, sanitizer configuration, and libFuzzer harnesses; we write no project-specific build logic. A project enters the pool only if its own tests build, run unattended, and pass at 100% with identical results across five runs on the unmodified code. Guetzli's 10 unit tests do, so it joins the 100 qualified projects (80 of which eventually contribute at least one validated instance).
+
+</div>
+<div class="wt-step" data-label="Site selection" markdown="1">
+<h4>2. The pipeline picks a site</h4>
+<div class="fig-svg">
+<svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The fuzzer-guided pipeline builds a map of functions reachable from a harness, scores each on a function score and a triggerability score, and selects ProcessAPP in jpeg_data_reader.cc, where a length guard sits directly before a copy.">
+  <style>
+    .n { fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .t { fill: currentColor; font-size: 14px; }
+    .h { fill: currentColor; font-size: 15px; font-weight: 600; }
+    .s { fill: currentColor; font-size: 12px; opacity: 0.75; }
+    .m { fill: currentColor; font-size: 13px; font-family: Menlo, monospace; }
+    .ar { fill: none; stroke: currentColor; stroke-width: 1.5; }
+  </style>
+  <defs>
+    <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+  </defs>
+  <rect class="n" x="20" y="30" width="220" height="240" rx="10" stroke="#2698BA" stroke-width="2"/>
+  <text class="h" x="130" y="56" text-anchor="middle">reachable from a harness</text>
+  <text class="s" x="130" y="74" text-anchor="middle">OSS-Fuzz coverage metadata</text>
+  <rect x="40" y="90" width="180" height="26" rx="6" fill="currentColor" opacity="0.08"/>
+  <text class="m" x="50" y="108" opacity="0.6">other function</text>
+  <rect x="40" y="122" width="180" height="26" rx="6" fill="currentColor" opacity="0.08"/>
+  <text class="m" x="50" y="140" opacity="0.6">other function</text>
+  <rect x="40" y="154" width="180" height="26" rx="6" fill="#B509AC" opacity="0.18"/>
+  <text class="m" x="50" y="172" font-weight="700">ProcessAPP</text>
+  <rect x="40" y="186" width="180" height="26" rx="6" fill="currentColor" opacity="0.08"/>
+  <text class="m" x="50" y="204" opacity="0.6">other function</text>
+  <rect x="40" y="218" width="180" height="26" rx="6" fill="currentColor" opacity="0.08"/>
+  <text class="m" x="50" y="236" opacity="0.6">other function</text>
+  <text class="s" x="130" y="262" text-anchor="middle">…</text>
+
+  <path class="ar" d="M240,150 L288,150" marker-end="url(#a3)"/>
+
+  <rect class="n" x="290" y="30" width="300" height="115" rx="10"/>
+  <text class="h" x="440" y="54" text-anchor="middle">function score</text>
+  <text class="t" x="440" y="78" text-anchor="middle">structural role (parser entry,</text>
+  <text class="t" x="440" y="96" text-anchor="middle">buffer writer, decoder…),</text>
+  <text class="t" x="440" y="114" text-anchor="middle">call depth, fanout, coverage</text>
+  <text class="s" x="440" y="134" text-anchor="middle">runtime vs static reachability</text>
+
+  <rect class="n" x="290" y="155" width="300" height="115" rx="10"/>
+  <text class="h" x="440" y="179" text-anchor="middle">triggerability score</text>
+  <text class="t" x="440" y="203" text-anchor="middle">parser proximity, path signal,</text>
+  <text class="t" x="440" y="221" text-anchor="middle">guard-to-sink distance,</text>
+  <text class="t" x="440" y="239" text-anchor="middle">nearby blockers</text>
+  <text class="s" x="440" y="259" text-anchor="middle">can a harness input reach it?</text>
+
+  <path class="ar" d="M590,88 C620,88 620,150 638,150" marker-end="url(#a3)"/>
+  <path class="ar" d="M590,212 C620,212 620,150 638,150" marker-end="url(#a3)"/>
+
+  <rect class="n" x="640" y="70" width="240" height="160" rx="10" stroke="#B509AC" stroke-width="2"/>
+  <text class="h" x="760" y="96" text-anchor="middle">selected site</text>
+  <text class="m" x="760" y="120" text-anchor="middle">jpeg_data_reader.cc</text>
+  <text class="m" x="760" y="138" text-anchor="middle">ProcessAPP</text>
+  <text class="t" x="760" y="166" text-anchor="middle">guard: VERIFY_LEN</text>
+  <text class="t" x="760" y="184" text-anchor="middle">sink: std::string copy</text>
+  <text class="s" x="760" y="210" text-anchor="middle">harness input format: JPEG</text>
+  <text class="s" x="450" y="292" text-anchor="middle">ranked by a weighted combination, then diversified across harness, role and category buckets</text>
+</svg>
+</div>
+
+The fuzzer-guided pipeline parses OSS-Fuzz metadata (Fuzz Introspector reports, harness definitions, coverage) into a map of functions reachable from at least one harness. Each is ranked by a weighted combination of two scores: a function score (structural role such as parser entry point or buffer writer, call depth, fanout, file coverage) and a triggerability score (parser proximity, path signal strength, guard-to-sink distance, nearby blockers). `ProcessAPP` in `jpeg_data_reader.cc` is a parser entry point where a guard sits directly before the copy it protects, and the harness feeds it JPEGs. Candidates are then diversified across harness, role, and category buckets so one file does not dominate.
+
+</div>
+<div class="wt-step" data-label="One-line edit" markdown="1">
+<h4>3. The agent deletes the length check</h4>
+
+The agent receives the function, the site, the inferred weakness type, the harness input format, and category-specific edit rules: no new branches, single-file edit, preserve the downstream operation. It makes one minimal change that weakens the existing check.
+
+<div class="tok-row"><span class="tok">VERIFY_LEN(2)</span><span class="tok">marker_len = ReadUint16(data, pos)</span><span class="tok tok-c">VERIFY_INPUT(marker_len, 2, 65535)</span><span class="tok tok-d tok-x">VERIFY_LEN(marker_len - 2)</span><span class="tok tok-b">std::string app_str(…, marker_len + 1)</span></div>
+
+```diff
+@@ -398,7 +398,7 @@ bool ProcessAPP(const uint8_t* data, size_t* pos, ...)
+   VERIFY_LEN(2);
+   size_t marker_len = ReadUint16(data, pos);
+   VERIFY_INPUT(marker_len, 2, 65535, MARKER_LEN);
+-  VERIFY_LEN(marker_len - 2);
++
+   // Save the marker type together with the app data.
+   std::string app_str(reinterpret_cast<const char*>(
+       &data[*pos - 3]), marker_len + 1);
+```
+
+The range check (`VERIFY_INPUT`, 2 to 65,535) stays. The check that the buffer really contains `marker_len - 2` more bytes is gone. The copy into `app_str` now trusts a length the attacker controls.
+
+</div>
+<div class="wt-step" data-label="Tests still pass" markdown="1">
+<h4>4. The unit tests still pass (Condition 1)</h4>
+<div class="fig-svg">
+<svg viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The injected build of guetzli compiles and passes all ten of its unit tests, satisfying condition one: the weakness is latent.">
+  <style>
+    .n { fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .t { fill: currentColor; font-size: 14px; }
+    .h { fill: currentColor; font-size: 15px; font-weight: 600; }
+    .s { fill: currentColor; font-size: 12px; opacity: 0.75; }
+    .ar { fill: none; stroke: currentColor; stroke-width: 1.5; }
+  </style>
+  <defs>
+    <marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+  </defs>
+  <rect class="n" x="20" y="58" width="200" height="120" rx="10" stroke="#B509AC" stroke-width="2"/>
+  <text class="h" x="120" y="86" text-anchor="middle">injected build</text>
+  <text class="t" x="120" y="110" text-anchor="middle">guetzli minus one line</text>
+  <text class="s" x="120" y="132" text-anchor="middle">compiled with build.sh</text>
+  <text class="s" x="120" y="150" text-anchor="middle">ASAN + UBSAN on</text>
+
+  <path class="ar" d="M220,118 L268,118" marker-end="url(#a4)"/>
+
+  <rect class="n" x="270" y="30" width="400" height="176" rx="10"/>
+  <text class="h" x="470" y="56" text-anchor="middle">project's own unit tests</text>
+  <g fill="#00ab37">
+    <circle cx="310" cy="100" r="16"/><circle cx="350" cy="100" r="16"/><circle cx="390" cy="100" r="16"/><circle cx="430" cy="100" r="16"/><circle cx="470" cy="100" r="16"/>
+    <circle cx="510" cy="100" r="16"/><circle cx="550" cy="100" r="16"/><circle cx="590" cy="100" r="16"/><circle cx="630" cy="100" r="16"/>
+  </g>
+  <circle cx="310" cy="140" r="16" fill="#00ab37"/>
+  <g fill="#fff" font-size="15" font-weight="700" text-anchor="middle">
+    <text x="310" y="105">✓</text><text x="350" y="105">✓</text><text x="390" y="105">✓</text><text x="430" y="105">✓</text><text x="470" y="105">✓</text>
+    <text x="510" y="105">✓</text><text x="550" y="105">✓</text><text x="590" y="105">✓</text><text x="630" y="105">✓</text><text x="310" y="145">✓</text>
+  </g>
+  <text class="t" x="480" y="145" text-anchor="middle">10 / 10 pass  (expected_passing_count: 10)</text>
+  <text class="s" x="470" y="174" text-anchor="middle">conforming JPEGs declare lengths that match their data,</text>
+  <text class="s" x="470" y="190" text-anchor="middle">so the missing check is never exercised</text>
+
+  <path class="ar" d="M670,118 L718,118" marker-end="url(#a4)"/>
+
+  <rect class="n" x="720" y="58" width="160" height="120" rx="10" stroke="#00ab37" stroke-width="2"/>
+  <text class="h" x="800" y="88" text-anchor="middle">Condition 1</text>
+  <text class="t" x="800" y="114" text-anchor="middle">weakness is</text>
+  <text class="t" x="800" y="132" text-anchor="middle">latent</text>
+  <text class="s" x="800" y="158" text-anchor="middle">a test failure → retry</text>
+  <text class="s" x="450" y="230" text-anchor="middle">Step 4 · a failing test would admit this edit under a SWE-Smith oracle; here it sends the agent back to retry</text>
+</svg>
+</div>
+
+The modified project is compiled and run against guetzli's own tests: 10 of 10 pass (`"expected_passing_count": 10` in the instance metadata). JPEGs produced by conforming encoders carry segment lengths that match their data, so the deleted check never fires on them. Had a test failed, the agent would have been prompted to retry; a failing test means a functional bug, which is exactly what we do not want.
+
+</div>
+<div class="wt-step" data-label="PoV and oracle" markdown="1">
+<h4>5. A crafted JPEG separates the two builds (Condition 2)</h4>
+
+The agent then writes a deterministic PoV, guided by the harness input model and seed extensions. Here it is a 504-byte file that opens with:
+
+<div class="tok-row"><span class="tok tok-b">FF D8</span><span class="tok-arrow">SOI</span><span class="tok tok-b">FF E0</span><span class="tok-arrow">APP0</span><span class="tok tok-a tok-hl">FF FF</span><span class="tok-arrow">length = 65,535</span><span class="tok tok-b">4A 46 49 46</span><span class="tok-arrow">"JFIF"</span><span class="tok">… 504 bytes total</span></div>
+
+<div class="fig-svg">
+<svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The 504-byte proof-of-vulnerability JPEG declares an APP0 segment length of 65535 bytes; the clean build rejects it through VERIFY_LEN with no crash, while the injected build reads far past the end of the input and AddressSanitizer reports a heap-buffer-overflow in ProcessAPP at jpeg_data_reader.cc line 403.">
+  <style>
+    .n { fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .t { fill: currentColor; font-size: 14px; }
+    .h { fill: currentColor; font-size: 15px; font-weight: 600; }
+    .s { fill: currentColor; font-size: 12px; opacity: 0.75; }
+    .m { fill: currentColor; font-size: 13px; font-family: Menlo, monospace; }
+    .ar { fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .ov { animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 0.8; } }
+  </style>
+  <defs>
+    <marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+  </defs>
+  <text class="h" x="20" y="28">PoV: a 504-byte JPEG with a lying length field</text>
+  <rect x="20" y="42" width="240" height="34" rx="6" fill="#2698BA" opacity="0.35"/>
+  <text class="m" x="140" y="64" text-anchor="middle">504 bytes actually present</text>
+  <rect class="ov" x="262" y="42" width="618" height="34" rx="6" fill="#F29105"/>
+  <text class="m" x="571" y="64" text-anchor="middle">…65,035 bytes past the end of the file</text>
+  <text class="s" x="20" y="96">bytes 0-1 FF D8 = SOI  ·  bytes 2-3 FF E0 = APP0  ·  bytes 4-5 FF FF = declared length 65,535 (largest VERIFY_INPUT allows)</text>
+  <path class="ar" d="M140,105 C140,135 250,120 250,150" marker-end="url(#a5)"/>
+  <path class="ar" d="M140,105 C140,135 650,120 650,150" marker-end="url(#a5)"/>
+
+  <rect class="n" x="60" y="152" width="380" height="150" rx="10"/>
+  <text class="h" x="250" y="178" text-anchor="middle">clean build</text>
+  <text class="m" x="250" y="204" text-anchor="middle">VERIFY_LEN(marker_len - 2)</text>
+  <text class="t" x="250" y="228" text-anchor="middle">buffer holds fewer than 65,533 bytes</text>
+  <text class="t" x="250" y="248" text-anchor="middle">→ input rejected, parsing stops</text>
+  <rect x="160" y="264" width="180" height="26" rx="8" fill="#00ab37" opacity="0.2"/>
+  <text class="t" x="250" y="282" text-anchor="middle" fill="#00ab37" font-weight="600">no crash</text>
+
+  <rect class="n" x="460" y="152" width="380" height="150" rx="10" stroke="#B509AC" stroke-width="2"/>
+  <text class="h" x="650" y="178" text-anchor="middle">injected build</text>
+  <text class="m" x="650" y="204" text-anchor="middle">std::string app_str(…, marker_len + 1)</text>
+  <text class="t" x="650" y="228" text-anchor="middle">copies from the declared length</text>
+  <text class="t" x="650" y="248" text-anchor="middle">→ reads beyond the input buffer</text>
+  <rect x="490" y="264" width="320" height="26" rx="8" fill="#F29105" opacity="0.25"/>
+  <text class="m" x="650" y="282" text-anchor="middle" font-weight="700">ASAN: heap-buffer-overflow</text>
+
+  <path class="ar" d="M250,302 C250,330 450,318 450,336" marker-end="url(#a5)"/>
+  <path class="ar" d="M650,302 C650,330 450,318 450,336" marker-end="url(#a5)"/>
+  <rect x="290" y="338" width="320" height="32" rx="10" fill="#B509AC" opacity="0.15" stroke="#B509AC" stroke-width="2"/>
+  <text class="t" x="450" y="359" text-anchor="middle" font-weight="600">Condition 2 · crash on injected only → accepted</text>
+</svg>
+</div>
+
+65,535 is the largest value `VERIFY_INPUT` accepts, so the surviving check lets it through. On the clean build, `VERIFY_LEN` rejects the file and nothing crashes. On the injected build, the `std::string` constructor copies from the declared length and reads 65,035 bytes past the end of the input. The verifier also checks that the sanitizer reports the expected error type at the expected location:
+
+```text
+==432==ERROR: AddressSanitizer: heap-buffer-overflow
+READ of size 65531 at 0x6fc93620b1f8 thread T0
+    #0 ProcessAPP jpeg_data_reader.cc:403:15
+SUMMARY: AddressSanitizer: heap-buffer-overflow
+    jpeg_data_reader.cc:403:15 in guetzli::ProcessAPP
+```
+
+Heap-buffer-overflow read, in `ProcessAPP`, at the copy: this matches the CWE-125 target, so the instance is accepted and saved as the diff, the PoV, the metadata, and this report.
+
+</div>
+<div class="wt-step" data-label="Task to student" markdown="1">
+<h4>6. From instance to training signal</h4>
+<div class="fig-svg">
+<svg viewBox="0 0 900 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The accepted guetzli instance becomes a SEC-bench style repair task; a teacher agent works on it inside the project container with no network and no reference patch; the differential oracle decides whether the trajectory succeeded; only successful trajectories are used to fine-tune a Gemma 4 student with LoRA.">
+  <style>
+    .n { fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .t { fill: currentColor; font-size: 14px; }
+    .h { fill: currentColor; font-size: 15px; font-weight: 600; }
+    .s { fill: currentColor; font-size: 12px; opacity: 0.75; }
+    .flow { fill: none; stroke: #B509AC; stroke-width: 2; stroke-dasharray: 6 6; animation: dash 1.2s linear infinite; }
+    @keyframes dash { to { stroke-dashoffset: -24; } }
+  </style>
+  <defs>
+    <marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#B509AC"/></marker>
+  </defs>
+  <rect class="n" x="20" y="50" width="190" height="150" rx="10" stroke="#2698BA" stroke-width="2"/>
+  <text class="h" x="115" y="76" text-anchor="middle">repair task</text>
+  <text class="s" x="115" y="94" text-anchor="middle">SEC-bench format</text>
+  <text class="t" x="115" y="120" text-anchor="middle">injected guetzli repo</text>
+  <text class="t" x="115" y="140" text-anchor="middle">PoV at /testcase</text>
+  <text class="t" x="115" y="160" text-anchor="middle">sanitizer report</text>
+  <text class="s" x="115" y="184" text-anchor="middle">reference patch withheld</text>
+
+  <path class="flow" d="M210,125 L248,125" marker-end="url(#a6)"/>
+
+  <rect class="n" x="250" y="50" width="200" height="150" rx="10"/>
+  <text class="h" x="350" y="76" text-anchor="middle">teacher agent</text>
+  <text class="s" x="350" y="94" text-anchor="middle">Mini-SWE-Agent scaffold</text>
+  <text class="t" x="350" y="120" text-anchor="middle">GPT-5.4-mini or</text>
+  <text class="t" x="350" y="140" text-anchor="middle">Gemma 4 31B</text>
+  <text class="s" x="350" y="166" text-anchor="middle">runs in the OSS-Fuzz container,</text>
+  <text class="s" x="350" y="182" text-anchor="middle">no network access</text>
+
+  <path class="flow" d="M450,125 L488,125" marker-end="url(#a6)"/>
+
+  <rect class="n" x="490" y="50" width="190" height="150" rx="10" stroke="#B509AC" stroke-width="2"/>
+  <text class="h" x="585" y="76" text-anchor="middle">same oracle</text>
+  <text class="s" x="585" y="94" text-anchor="middle">decides success, not the agent</text>
+  <text class="t" x="585" y="120" text-anchor="middle">patched build: tests</text>
+  <text class="t" x="585" y="140" text-anchor="middle">pass, PoV no longer</text>
+  <text class="t" x="585" y="160" text-anchor="middle">crashes</text>
+  <text class="s" x="585" y="184" text-anchor="middle">failed trajectories discarded</text>
+
+  <path class="flow" d="M680,125 L718,125" marker-end="url(#a6)"/>
+
+  <rect class="n" x="720" y="50" width="160" height="150" rx="10" stroke="#00ab37" stroke-width="2"/>
+  <text class="h" x="800" y="76" text-anchor="middle">student SFT</text>
+  <text class="s" x="800" y="94" text-anchor="middle">LoRA r=32, α=64</text>
+  <text class="t" x="800" y="120" text-anchor="middle">Gemma 4</text>
+  <text class="t" x="800" y="140" text-anchor="middle">E4B / 12B / 31B</text>
+  <text class="s" x="800" y="166" text-anchor="middle">1,194 GPT trajectories,</text>
+  <text class="s" x="800" y="182" text-anchor="middle">880 Gemma trajectories</text>
+  <text class="s" x="450" y="240" text-anchor="middle">Step 6 · the guetzli instance is now one of 1,034 tasks; the corpus of successful teacher runs is the training set</text>
+</svg>
+</div>
+
+The accepted pair becomes a SEC-bench-style repair task: the injected repository, the PoV, and the sanitizer report, with the reference patch withheld. A teacher agent (GPT-5.4-mini or Gemma 4 31B on Mini-SWE-Agent) works inside the OSS-Fuzz container with no network access. Success is decided by the same differential oracle, not by the agent's own claim, so a trajectory that announces a fix without passing validation is discarded. Only successful trajectories are used to fine-tune Gemma 4 students at E4B, 12B, and 31B.
+
+</div>
+</div>
+
+## Under the hood
+
+| Symbol | Meaning |
+|---|---|
+| $$P, T$$ | a qualified OSS-Fuzz project and its unit test suite |
+| $$B_0$$ | the clean build of $$P$$ |
+| $$\delta$$ | an injected edit (the diff) |
+| $$B_\delta$$ | the build of $$P$$ with $$\delta$$ applied |
+| $$x$$ | a proof-of-vulnerability input |
+| $$\mathrm{pass}(B, t)$$ | build $$B$$ passes unit test $$t$$ |
+| $$\mathrm{crash}(B, x)$$ | running $$B$$ on $$x$$ yields a sanitizer report of the expected type at the expected location |
+| $$F_n, G_m$$ | empirical distributions of an edit statistic over injected and real patches |
+| $$D_{n,m}$$ | two-sample Kolmogorov-Smirnov distance |
+{: .notation}
+
+**The admission predicate.** Both pipelines end at the same criterion. Written out, an instance $$(\delta, x)$$ is admitted when
+
+$$
+\mathrm{accept}(\delta, x) \iff \underbrace{\forall t \in T:\ \mathrm{pass}(B_\delta, t)}_{\text{Condition 1: latent}} \;\wedge\; \underbrace{\mathrm{crash}(B_\delta, x) \wedge \neg\,\mathrm{crash}(B_0, x)}_{\text{Condition 2: differential PoV}}
+$$
+
+Condition 1 says the weakness survives normal execution, which is what real weaknesses that pass code review and production testing do. Condition 2 is a differential test under identical input, and it is what makes the pair meaningful: a crash on both builds is a pre-existing bug, a crash on neither is an injection nobody can reach. The verifier's check on sanitizer type and location, folded into $$\mathrm{crash}$$ above, rules out spurious failures.
+
+<div class="fig-svg">
+<svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CyberForge architecture: 100 qualified OSS-Fuzz projects feed a fuzzer-guided pipeline and an agentic in-context pipeline; 16,172 injection attempts pass through the differential oracle; 1,034 validated instances (643 and 391) become tasks for teacher trajectory collection and student fine-tuning.">
+  <style>
+    .n { fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .t { fill: currentColor; font-size: 14px; }
+    .h { fill: currentColor; font-size: 15px; font-weight: 600; }
+    .s { fill: currentColor; font-size: 12px; opacity: 0.75; }
+    .flow { fill: none; stroke: #B509AC; stroke-width: 2; stroke-dasharray: 6 6; animation: dash 1.2s linear infinite; }
+    @keyframes dash { to { stroke-dashoffset: -24; } }
+  </style>
+  <defs>
+    <marker id="a7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#B509AC"/></marker>
+  </defs>
+  <rect class="n" x="20" y="100" width="140" height="100" rx="10" stroke="#2698BA" stroke-width="2"/>
+  <text class="h" x="90" y="128" text-anchor="middle">OSS-Fuzz</text>
+  <text class="t" x="90" y="148" text-anchor="middle">100 projects</text>
+  <text class="s" x="90" y="170" text-anchor="middle">containers, tests,</text>
+  <text class="s" x="90" y="186" text-anchor="middle">harnesses, sanitizers</text>
+
+  <rect class="n" x="210" y="30" width="200" height="100" rx="10"/>
+  <text class="h" x="310" y="56" text-anchor="middle">P1 fuzzer-guided</text>
+  <text class="s" x="310" y="76" text-anchor="middle">harness-reachable site,</text>
+  <text class="s" x="310" y="92" text-anchor="middle">one minimal edit, PoV,</text>
+  <text class="s" x="310" y="108" text-anchor="middle">90 s libFuzzer replay</text>
+
+  <rect class="n" x="210" y="170" width="200" height="100" rx="10"/>
+  <text class="h" x="310" y="196" text-anchor="middle">P2 agentic in-context</text>
+  <text class="s" x="310" y="216" text-anchor="middle">PrimeVul CVE retrieval or</text>
+  <text class="s" x="310" y="232" text-anchor="middle">specialist exploration, CodeQL,</text>
+  <text class="s" x="310" y="248" text-anchor="middle">taint analysis, retry loops</text>
+
+  <rect class="n" x="460" y="80" width="180" height="140" rx="10" stroke="#B509AC" stroke-width="2"/>
+  <text class="h" x="550" y="108" text-anchor="middle">differential oracle</text>
+  <text class="t" x="550" y="134" text-anchor="middle">all unit tests pass</text>
+  <text class="t" x="550" y="154" text-anchor="middle">PoV: injected crashes,</text>
+  <text class="t" x="550" y="172" text-anchor="middle">clean does not</text>
+  <text class="s" x="550" y="196" text-anchor="middle">sanitizer type + location</text>
+  <text class="s" x="550" y="210" text-anchor="middle">must match the target</text>
+
+  <rect class="n" x="690" y="30" width="190" height="100" rx="10" stroke="#00ab37" stroke-width="2"/>
+  <text class="h" x="785" y="56" text-anchor="middle">1,034 instances</text>
+  <text class="t" x="785" y="80" text-anchor="middle">643 from P1, 391 from P2</text>
+  <text class="s" x="785" y="100" text-anchor="middle">80 projects, 63 CWEs</text>
+  <text class="s" x="785" y="116" text-anchor="middle">median edit: 2 lines</text>
+
+  <rect class="n" x="690" y="170" width="190" height="100" rx="10"/>
+  <text class="h" x="785" y="196" text-anchor="middle">tasks → SFT</text>
+  <text class="t" x="785" y="220" text-anchor="middle">teacher trajectories,</text>
+  <text class="t" x="785" y="238" text-anchor="middle">oracle-verified only</text>
+  <text class="s" x="785" y="258" text-anchor="middle">Gemma 4 E4B / 12B / 31B</text>
+
+  <path class="flow" d="M160,135 C185,135 185,80 208,80" marker-end="url(#a7)"/>
+  <path class="flow" d="M160,165 C185,165 185,220 208,220" marker-end="url(#a7)"/>
+  <path class="flow" d="M410,80 C435,80 435,130 458,130" marker-end="url(#a7)"/>
+  <path class="flow" d="M410,220 C435,220 435,170 458,170" marker-end="url(#a7)"/>
+  <path class="flow" d="M640,120 C665,120 665,80 688,80" marker-end="url(#a7)"/>
+  <path class="flow" d="M785,130 L785,168" marker-end="url(#a7)"/>
+  <text class="s" x="435" y="60" text-anchor="middle">16,172</text>
+  <text class="s" x="435" y="74" text-anchor="middle">attempts</text>
+  <text class="s" x="550" y="248" text-anchor="middle">largest failure: PoV never</text>
+  <text class="s" x="550" y="264" text-anchor="middle">triggers (44.6% P1, 33.1% P2)</text>
+</svg>
+<div class="fig-caption">The two pipelines differ in how they find sites and build PoVs; they share the oracle, the task format, and the training recipe. Both run Gemma 4 31B through Mini-SWE-Agent, capped at 200 iterations per invocation.</div>
+</div>
+
+**Yield.** CyberForge made 16,172 injection attempts and 1,034 passed validation: 643 from the fuzzer-guided pipeline and 391 from the agentic one. Writing a plausible injection is easy; producing one the oracle accepts is the hard part. In the Pipeline 2 ablation, a naive single-pass agent compiles and passes unit tests on 68.2% of attempts and passes validation on 0%; taint analysis alone reaches 2.8% validated, retry loops alone 3.5%, and the full workflow lifts plausible injections to 77.6% and validated yield to 7.5%. Pipeline 1 shows the same from the other side: a post-hoc 90-second libFuzzer replay over a seeded corpus raises yield with the injection stage untouched. The pipelines fail at different stages, Pipeline 1 losing 64.2% of candidates at validation and Pipeline 2 58.8% at injection, but a PoV that never triggers is the largest single cause in both (44.6% and 33.1%).
+
+**Realism.** For an edit statistic (functions modified, files touched, hunks, lines changed), let $$F_n$$ and $$G_m$$ be the empirical distributions over the injected corpus and over the 300 real SEC-bench instances. The two-sample Kolmogorov-Smirnov statistic is
+
+$$
+D_{n,m} = \sup_x \,\bigl| F_n(x) - G_m(x) \bigr|
+$$
+
+A KS distance has no universal threshold, so the floor is measured between two real corpora, the SEC-bench `cve` and `oss` splits. For functions modified, injected-to-real is 0.165 against a real-to-real floor of 0.190; files touched and hunk count give 0.123 and 0.243 against 0.065 and 0.205. The edits are small and local in the way CVE patches are: 1,025 of 1,034 instances change one file, 944 confine the change to one hunk, and the median edit is 2 lines. The guetzli instance, one deleted line, is typical.
+
+**Training.** Over the 1,034 instances the teachers yielded 1,194 accepted trajectories from GPT-5.4-mini and 880 from Gemma 4 31B. Raw trajectories are recorded in the teacher's environment, so before fine-tuning they are aligned to the SEC-bench harness (`secb repro` / `secb build`, PoV paths remapped to `/testcase`, `rg` rewritten to `grep`), linearized to one command per assistant turn, and compressed with a sliding window over old observations so the turn that writes the patch is never truncated. Every student uses the same recipe: LoRA adapters ($$r = 32$$, $$\alpha = 64$$, dropout 0.05) on the attention and MLP projections with the base frozen, learning rate $$1 \times 10^{-4}$$ with a cosine schedule, batch size 1 with gradient accumulation 2, three epochs, BFloat16, one H200. Holding the 12B student and Gemma teacher fixed, SEC-bench rises from 3.6% to 12.1% to 16.0% as the trajectory corpus doubles twice; at 220 trajectories the student scores below its own base, so a corpus too small to teach the workflow is worse than none.
+
+## What the numbers say
+
+| Student | Teacher | SEC-bench (%) | PatchEval strict (%) |
+|---|---|---|---|
+| Gemma 4 E4B | base | 6.0 | 2.6 |
+| CyberForge-E4B | GPT-5.4-mini | 9.3 (+3.3) | 9.1 (+6.5) |
+| Gemma 4 12B | base | 8.7 | 3.9 |
+| CyberForge-12B | GPT-5.4-mini | 16.7 (+8.0) | 12.8 (+8.9) |
+| Gemma 4 31B | base | 58.0 | 12.2 |
+| CyberForge-31B | GPT-5.4-mini | 72.7 (+14.7) | 14.8 (+2.6) |
+| GPT-5.4-mini | (teacher) | 74.0 | 13.0 |
+
+All six student-teacher configurations improve on SEC-bench, by 3.3 to 14.7 points; the self-distilled students taught by Gemma 4 31B gain too (31B: 64.7%). The corpus is entirely C/C++, yet every configuration also improves on PatchEval's Go, JavaScript, and Python CVEs, and the 31B student passes its teacher there. What changed inside the agent explains the scores: the 12B base completes an edit-then-verify cycle on 20.7% of instances, and after fine-tuning on 82.7%.
+
+## Try it
+
+- Paper page on this site: [/papers/cyberforge/](/papers/cyberforge/)
+- arXiv: [2608.06471](https://arxiv.org/abs/2608.06471)
+- Code: [github.com/Cyb3rForge/CyberForge](https://github.com/Cyb3rForge/CyberForge)
+- Data: [cyberforge-projects on Hugging Face](https://huggingface.co/datasets/AmL-hug/cyberforge-projects), one archive per project with the diff, metadata, sanitizer report, and PoV files for every instance, including `guetzli/vulnerability_FZ_24`
+- Project page: [cyb3rforge.github.io](https://cyb3rforge.github.io/)
+- UMD CS wrote about the project: [When AI Goes on Defense](https://www.cs.umd.edu/article/2026/09/when-ai-goes-defense)

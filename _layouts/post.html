@@ -59,6 +59,8 @@ layout: default
   </div>
   {%- endif %}
 
+  <script src="{{ '/assets/js/walkthrough.js' | relative_url }}" defer></script>
+
   {%- if site.related_blog_posts.enabled -%}
     {%- if page.related_posts == null or page.related_posts -%}
       {% include related_posts.html %}
