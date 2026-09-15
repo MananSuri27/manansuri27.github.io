@@ -23,7 +23,7 @@ Identifiers: ORCID https://orcid.org/{{ site.orcid_id }} · Google Scholar https
 ## Selected papers
 
 - Frames2LoRA: Parametric Video Internalization for Vision-Language Models (2026) — https://arxiv.org/abs/2606.04351
-- CyberForge: Verified Vulnerability Injection at Repository Level for Cybersecurity Agent Training (2026) — https://arxiv.org/abs/2608.06471
+- CyberForge: Verified Vulnerability Injection at Repository Level for Cybersecurity Agent Training (2026) — https://arxiv.org/abs/2608.06471 · project page https://cyb3rforge.github.io/
 - Omni2LoRA: Coherence-Preserving Parametric Memory for Efficient Omni Language Models (2026) — https://arxiv.org/abs/2608.09227
 - CodeScout: Contextual Problem Statement Enhancement for Software Agents (ACL 2026 Findings) — https://arxiv.org/abs/2603.05744
 - Structured Uncertainty Guided Clarification for LLM Agents (ACL 2026 Findings) — https://arxiv.org/abs/2511.08798

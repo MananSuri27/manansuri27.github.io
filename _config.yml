@@ -81,7 +81,7 @@ scholar_userid: KbVluf4AAAAJ # your Google Scholar ID
 semanticscholar_id: 145282060 # your Semantic Scholar ID
 whatsapp_number: # your WhatsApp number (full phone number in international format. Omit any zeroes, brackets, or dashes when adding the phone number in international format.)
 orcid_id: 0000-0001-5089-2658 # your ORCID ID
-medium_username: manansuri # your Medium username
+medium_username: # your Medium username (post migrated to /blog; icon hidden)
 quora_username: # your Quora username
 publons_id: # your ID on Publons
 lattes_id: # your ID on Lattes (Brazilian Lattes CV)
@@ -395,8 +395,8 @@ bootstrap:
 bootstrap-table:
   version: "1.21.4"
 fontawesome:
-  version: "6.4.0"
-  integrity: "sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8="
+  version: "6.7.2"
+  integrity: "sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo="
 jquery:
   version: "3.6.0"
   integrity: "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
