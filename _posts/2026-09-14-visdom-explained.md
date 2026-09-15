@@ -2,7 +2,7 @@
 layout: post
 title: "Answering questions over a pile of PDFs: VisDoM explained"
 description: "Why multi-document QA breaks when the answer is in a table or a chart, and how VisDoMRAG fuses visual and textual retrieval to fix it."
-date: 2026-09-15 10:00:00
+date: 2026-09-14 12:00:00
 tags: rag multimodal documents benchmarks
 categories: research
 thumbnail: assets/img/papers/visdom/hero.png

@@ -2,7 +2,7 @@
 layout: post
 title: "Turning a video into a LoRA adapter: Frames2LoRA explained"
 description: "How Frames2LoRA lets a frozen vision-language model answer questions about a video with zero visual tokens in context, and where it still falls short."
-date: 2026-09-15 10:00:00
+date: 2026-09-14 12:00:00
 tags: video vlm lora hypernetworks
 categories: research
 thumbnail: assets/img/papers/frames2lora/hero.png

@@ -2,7 +2,7 @@
 layout: post
 title: "Ask fewer, better questions: SAGE-Agent and ClarifyBench explained"
 description: "How modeling uncertainty over tool parameters, not tokens, lets an LLM agent decide which clarifying question to ask and when to stop asking."
-date: 2026-09-15 10:00:00
+date: 2026-09-14 12:00:00
 tags: agents tool-use clarification uncertainty
 categories: research
 thumbnail: assets/img/papers/sage-clarification/hero.png

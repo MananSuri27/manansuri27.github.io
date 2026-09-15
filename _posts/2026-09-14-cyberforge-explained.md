@@ -2,7 +2,7 @@
 layout: post
 title: "Manufacturing bugs that survive the test suite: CyberForge explained"
 description: "How CyberForge injects execution-verified vulnerabilities into real C/C++ repositories, and what training on them does to a security agent."
-date: 2026-09-15 10:00:00
+date: 2026-09-14 12:00:00
 tags: security agents datasets nist
 categories: research
 thumbnail: assets/img/papers/cyberforge/hero.png

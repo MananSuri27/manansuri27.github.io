@@ -2,7 +2,7 @@
 layout: post
 title: "Which bar is the model talking about? ChartLens explained"
 description: "How ChartLens grounds a multimodal LLM's chart answers to specific bars, points, and sectors, and why that makes hallucinations easy to catch."
-date: 2026-09-15 10:00:00
+date: 2026-09-14 12:00:00
 tags: charts multimodal attribution hallucination
 categories: research
 thumbnail: assets/img/papers/chartlens/hero.png
