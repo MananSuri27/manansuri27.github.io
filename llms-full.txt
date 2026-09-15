@@ -166,6 +166,11 @@ Each paper has its own page on this site with the abstract, a figure, key result
 
 ## Blog posts
 
+- 2026-09-14: Answering questions over a pile of PDFs: VisDoM explained — https://manansuri.com/blog/2026/visdom-explained/. Why multi-document QA breaks when the answer is in a table or a chart, and how VisDoMRAG fuses visual and textual retrieval to fix it.
+- 2026-09-14: Ask fewer, better questions: SAGE-Agent and ClarifyBench explained — https://manansuri.com/blog/2026/sage-clarification-explained/. How modeling uncertainty over tool parameters, not tokens, lets an LLM agent decide which clarifying question to ask and when to stop asking.
+- 2026-09-14: Turning a video into a LoRA adapter: Frames2LoRA explained — https://manansuri.com/blog/2026/frames2lora-explained/. How Frames2LoRA lets a frozen vision-language model answer questions about a video with zero visual tokens in context, and where it still falls short.
+- 2026-09-14: Manufacturing bugs that survive the test suite: CyberForge explained — https://manansuri.com/blog/2026/cyberforge-explained/. How CyberForge injects execution-verified vulnerabilities into real C/C++ repositories, and what training on them does to a security agent.
+- 2026-09-14: Which bar is the model talking about? ChartLens explained — https://manansuri.com/blog/2026/chartlens-explained/. How ChartLens grounds a multimodal LLM's chart answers to specific bars, points, and sectors, and why that makes hallucinations easy to catch.
 - 2022-01-21: A Dummy's Guide to Word2Vec — https://manansuri.com/blog/2022/a-dummys-guide-to-word2vec/. What word embeddings are, how Word2Vec learns them (CBOW and skip-gram), and how to train, probe, and visualise your own with Gensim.
 
 ## Links

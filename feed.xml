@@ -1,5 +1,288 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://manansuri.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://manansuri.com/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-09-15T05:18:04+00:00</updated><id>https://manansuri.com/feed.xml</id><title type="html">blank</title><subtitle>Manan Suri is a Computer Science PhD student at the University of Maryland working on LLM agents: trustworthy context use, efficient parametric memory, and the benchmarks agents need.
-</subtitle><entry><title type="html">A Dummy’s Guide to Word2Vec</title><link href="https://manansuri.com/blog/2022/a-dummys-guide-to-word2vec/" rel="alternate" type="text/html" title="A Dummy’s Guide to Word2Vec" /><published>2022-01-21T12:06:00+00:00</published><updated>2022-01-21T12:06:00+00:00</updated><id>https://manansuri.com/blog/2022/a-dummys-guide-to-word2vec</id><content type="html" xml:base="https://manansuri.com/blog/2022/a-dummys-guide-to-word2vec/"><![CDATA[<p><em>Originally published on <a href="https://medium.com/@manansuri/a-dummys-guide-to-word2vec-456444f3c673">Medium</a> in January 2022; migrated and lightly updated in September 2026. The code has been updated for Gensim 4 (<code class="language-plaintext highlighter-rouge">size</code> → <code class="language-plaintext highlighter-rouge">vector_size</code>, <code class="language-plaintext highlighter-rouge">iter</code> → <code class="language-plaintext highlighter-rouge">epochs</code>, <code class="language-plaintext highlighter-rouge">wv.vocab</code> → <code class="language-plaintext highlighter-rouge">wv.index_to_key</code>), and a short postscript on what Word2Vec still teaches us in the LLM era has been added at the end.</em></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://manansuri.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://manansuri.com/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-09-15T05:20:34+00:00</updated><id>https://manansuri.com/feed.xml</id><title type="html">blank</title><subtitle>Manan Suri is a Computer Science PhD student at the University of Maryland working on LLM agents: trustworthy context use, efficient parametric memory, and the benchmarks agents need.
+</subtitle><entry><title type="html">Which bar is the model talking about? ChartLens explained</title><link href="https://manansuri.com/blog/2026/chartlens-explained/" rel="alternate" type="text/html" title="Which bar is the model talking about? ChartLens explained" /><published>2026-09-14T12:00:00+00:00</published><updated>2026-09-14T12:00:00+00:00</updated><id>https://manansuri.com/blog/2026/chartlens-explained</id><content type="html" xml:base="https://manansuri.com/blog/2026/chartlens-explained/"><![CDATA[<p>Ask a multimodal LLM “in which year did Armenia require the most import documents?” and it will answer confidently. Whether it is right is another matter. Charts encode exact numbers, and a model that misreads one bar produces text that looks fine and is wrong. In finance, policy, or science that error matters, and the reader has no cheap way to check.</p>
+
+<p>Text LLMs got a partial fix years ago: attribution. Make the model cite its source and a human can verify the claim. Charts had nothing equivalent. Our ACL 2025 paper, <a href="/papers/chartlens/">ChartLens: Fine-grained Visual Attribution in Charts</a>, gives charts their citations: the specific bars, points, or pie sectors that support an answer.</p>
+
+<h2 id="the-idea">The idea</h2>
+
+<p>We call the task post-hoc fine-grained visual attribution. Given a chart and a response (a question and its answer), return the set of chart regions that justify the response. A good attribution is relevant (every region matters to the answer), complete (nothing needed is missing), and precise (nothing irrelevant is included).</p>
+
+<p>Post-hoc is the important word. Attribution runs after the answer is produced, by any system, so it is a plug-in verification layer rather than a replacement chart model. If the highlighted bars do not support the answer, you have found a hallucination.</p>
+
+<p>Rather than asking a model to emit pixel coordinates, which MLLMs are poor at, we first find the chart’s elements ourselves, label them, and let the model reason over labels.</p>
+
+<h2 id="how-it-works">How it works</h2>
+
+<figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/papers/chartlens/hero-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/papers/chartlens/hero-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/papers/chartlens/hero-1400.webp" />
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/papers/chartlens/hero.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+  </picture><figcaption class="caption">ChartLens. Stage 1 turns bars, pie sectors, and line segments into labeled marks using heuristics, SAM, and LineFormer. Stage 2 prompts a multimodal LLM with the marked chart and the response, and it returns the labels that support the answer.</figcaption>
+
+</figure>
+
+<p><strong>Stage 1: mark generation.</strong> The goal is a set of candidate regions, one per chart element, robust to different chart styles.</p>
+
+<ul>
+  <li>For bar charts we binarize the image with Otsu thresholding in both RGB and HSV, find contours, split them by unique pixel values so grouped bars come apart, and filter by solidity and area.</li>
+  <li>For pie charts we find the largest contour, fit its enclosing circle, unroll the pie along the radial axis, and detect sector boundaries as edges in the unrolled strip.</li>
+  <li>These heuristics are brittle on low-contrast images and can mistake grid lines for elements, so we sample points inside each candidate and pass them to the Segment Anything Model (SAM). SAM returns tight masks and gives weak, low-IoU masks for grid lines and labels, which filters them out.</li>
+  <li>Lines are the hard case: thin, overlapping, intersecting. We use LineFormer, a transformer-based line extractor, then split each line into equally spaced segments so a point on a line has a mark to refer to.</li>
+</ul>
+
+<p><strong>Stage 2: attribution with an MLLM.</strong> Each element gets an alphanumeric label drawn on the image, following the set-of-marks prompting idea. The prompt explains chart attribution, gives few-shot textual examples, and asks the model to reason step by step through two questions: is the answer consistent with the chart (validation), and which labeled elements support it (attribution)? For line charts the model names pairs of marked points that bracket the relevant region.</p>
+
+<p><strong>ChartVA-Eval.</strong> To measure any of this we needed a benchmark, so we built one with 1,200+ samples across three subsets: ChartVA-AITQA (synthetic charts rendered from airline SEC filing tables), ChartVA-PlotQA (synthetic scientific charts from World Bank and government open data), and ChartVA-ChartQA (real charts from Statista, Pew Research, Our World in Data, and OECD). Attributions were drafted with GPT-4o from the underlying tables and then checked by annotators for relevance and completeness, with inter-annotator agreement of 0.89 and 0.84 (Cohen’s kappa).</p>
+
+<h2 id="what-we-found">What we found</h2>
+
+<p>We compared against zero-shot GPT-4o bounding-box prompting, Kosmos-2, and LISA, with GPT-4o as the MLLM inside ChartLens.</p>
+
+<ul>
+  <li>On bar charts, ChartLens scores 69.28 F1 on ChartVA-AITQA and 64.14 on ChartVA-ChartQA; zero-shot GPT-4o gets 22.77 and 7.75, and Kosmos-2 and LISA stay under 5.</li>
+  <li>On pie charts, ChartLens reaches 48.56 F1 versus 7.17 for GPT-4o, 11.70 for Kosmos-2, and 2.41 for LISA.</li>
+  <li>On line charts, ChartLens covers 52% to 78% of ground-truth points while flagging only 1% to 10% of the chart area. The grounding baselines reach high detection by highlighting large regions; ChartLens uses 3 to 50 times less area.</li>
+  <li>Overall, that is a 26-66% improvement in fine-grained attribution over the baselines.</li>
+</ul>
+
+<p>The qualitative failures are instructive. GPT-4o tries to be specific but cannot localize through text coordinates. LISA and Kosmos-2 return generic components, such as the whole pie, no matter what the question asks.</p>
+
+<h2 id="try-it">Try it</h2>
+
+<ul>
+  <li>Paper page: <a href="/papers/chartlens/">/papers/chartlens/</a></li>
+  <li>arXiv: <a href="https://arxiv.org/abs/2505.19360">2505.19360</a></li>
+  <li>Code and the ChartVA-Eval benchmark: <a href="https://github.com/MananSuri27/ChartLens">github.com/MananSuri27/ChartLens</a></li>
+  <li>ACL Anthology: <a href="https://aclanthology.org/2025.acl-long.1094/">2025.acl-long.1094</a></li>
+</ul>]]></content><author><name></name></author><category term="research" /><category term="charts" /><category term="multimodal" /><category term="attribution" /><category term="hallucination" /><summary type="html"><![CDATA[How ChartLens grounds a multimodal LLM's chart answers to specific bars, points, and sectors, and why that makes hallucinations easy to catch.]]></summary></entry><entry><title type="html">Manufacturing bugs that survive the test suite: CyberForge explained</title><link href="https://manansuri.com/blog/2026/cyberforge-explained/" rel="alternate" type="text/html" title="Manufacturing bugs that survive the test suite: CyberForge explained" /><published>2026-09-14T12:00:00+00:00</published><updated>2026-09-14T12:00:00+00:00</updated><id>https://manansuri.com/blog/2026/cyberforge-explained</id><content type="html" xml:base="https://manansuri.com/blog/2026/cyberforge-explained/"><![CDATA[<p>Attackers have an easier job than defenders. An attacker needs one exploitable weakness and can keep trying; a defender has to keep an entire codebase secure, all the time. Agentic systems have started finding real vulnerabilities in real software, which makes that asymmetry worse unless defenders get agents of their own that they can deploy and adapt.</p>
+
+<p>The bottleneck is training data. Software-engineering agents jumped by double digits once someone packaged thousands of real repositories with reproducible build and test environments. Security agents never got that, and the reason is subtle: a functional bug is easy to verify because a test fails. A security weakness is the opposite. It has to survive the test suite and only show up under a crafted input. Existing runnable datasets are built from disclosed CVEs, which caps them at the rate humans find and publish bugs, and most are meant for evaluation rather than training.</p>
+
+<p>CyberForge is our attempt to build that pipeline. I worked on it with Amine Lbath and colleagues during a NIST PREP fellowship in spring 2026, together with Dinesh Manocha at UMD. Amine and I share first authorship.</p>
+
+<h2 id="the-idea">The idea</h2>
+
+<p>Instead of mining vulnerabilities, create them. Take a real C or C++ project with a working build and test suite, have an LLM agent introduce a weakness, and then check it by execution, not by reading the diff. Two conditions decide whether an instance is admitted. The injected build must still pass every one of the project’s own unit tests, so the weakness is latent. And a proof-of-vulnerability (PoV) input must trigger on the injected build and not on the clean one. Neither the injection nor the PoV means anything without the other, so the oracle validates them jointly.</p>
+
+<p>Because instances are created rather than mined, corpus growth no longer depends on disclosure.</p>
+
+<h2 id="how-it-works">How it works</h2>
+
+<figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/papers/cyberforge/hero-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/papers/cyberforge/hero-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/papers/cyberforge/hero-1400.webp" />
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/papers/cyberforge/hero.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+  </picture><figcaption class="caption">OSS-Fuzz projects feed two injection pipelines. A shared differential oracle keeps only pairs where the clean build does not crash, the injected build does, and the unit tests still pass. Validated pairs become agent tasks; teacher trajectories over them fine-tune student models.</figcaption>
+
+</figure>
+
+<p>We start from projects in OSS-Fuzz, which already ship Docker images with build scripts, sanitizers, and fuzz harnesses. A project qualifies only if its tests pass at 100% across five unattended runs on unmodified code. That gave us 100 projects; 80 ended up contributing instances.</p>
+
+<p>Two pipelines feed the oracle. The fuzzer-guided pipeline mines OSS-Fuzz coverage metadata to find functions that are security-relevant and reachable from an existing harness, scores them by role and triggerability, and hands an agent one site with tight edit constraints: one minimal change that weakens an existing check. The agent writes a deterministic PoV, and a post-hoc libFuzzer run with format-aware seeds provides a second chance at a trigger.</p>
+
+<p>The agentic pipeline reaches sites no harness covers. Candidates come from retrieval against known CVE functions in PrimeVul (structural and semantic similarity fused together) and from specialist agents exploring the codebase by weakness family. Each target carries its CWE and its CodeQL-recovered dataflow. After injection, taint analysis finds attacker-controlled paths to the site, and a PoV stage uses sanitizer reports and clean-versus-injected differences to build a trigger, with retry loops when it fails.</p>
+
+<p>Validated pairs become SEC-bench-style tasks. Teacher agents (GPT-5.4-mini and Gemma 4 31B) run in the project container with no network and no reference patch, success is decided by the oracle rather than the agent’s own claim, and only successful trajectories are used to fine-tune Gemma 4 students at E4B, 12B, and 31B.</p>
+
+<h2 id="what-we-found">What we found</h2>
+
+<ul>
+  <li>16,172 injection attempts produced 1,034 validated vulnerabilities across 80 projects and 63 CWE categories. Writing a plausible injection is easy; a naive single-pass agent passes unit tests 68.2% of the time and validation 0% of the time. The full workflow takes validated yield to 7.5%.</li>
+  <li>On SEC-bench, all six student-teacher pairs improve, by 3.3 to 14.7 points. Gemma 4 31B goes from 58.0% to 72.7% under a GPT-5.4-mini teacher, within 1.3 points of the teacher. The 12B student roughly doubles, from 8.7% to 16.7%.</li>
+  <li>The corpus is entirely C/C++, yet every configuration also improves on PatchEval, which is Go, JavaScript, and Python. The 31B student reaches 14.8% strict against its teacher’s 13.0%.</li>
+  <li>The injected edits look like real patches: the Kolmogorov-Smirnov distance to real SEC-bench CVE edits is 0.165, under the 0.190 floor between two real CVE corpora.</li>
+</ul>
+
+<p>What changed in the agents was as interesting as the scores. The 12B base model edits blindly, completing an edit-then-verify cycle on 20.7% of instances. After fine-tuning that rises to 82.7%, and its gain comes almost entirely from reaching the verification stage at all.</p>
+
+<h2 id="try-it">Try it</h2>
+
+<ul>
+  <li>Paper page on this site: <a href="/papers/cyberforge/">/papers/cyberforge/</a></li>
+  <li>arXiv: <a href="https://arxiv.org/abs/2608.06471">2608.06471</a></li>
+  <li>Code: <a href="https://github.com/Cyb3rForge/CyberForge">github.com/Cyb3rForge/CyberForge</a></li>
+  <li>Data: <a href="https://huggingface.co/datasets/AmL-hug/cyberforge-projects">cyberforge-projects on Hugging Face</a></li>
+  <li>Project page: <a href="https://cyb3rforge.github.io/">cyb3rforge.github.io</a></li>
+  <li>UMD CS wrote about the project: <a href="https://www.cs.umd.edu/article/2026/09/when-ai-goes-defense">When AI Goes on Defense</a></li>
+</ul>]]></content><author><name></name></author><category term="research" /><category term="security" /><category term="agents" /><category term="datasets" /><category term="nist" /><summary type="html"><![CDATA[How CyberForge injects execution-verified vulnerabilities into real C/C++ repositories, and what training on them does to a security agent.]]></summary></entry><entry><title type="html">Turning a video into a LoRA adapter: Frames2LoRA explained</title><link href="https://manansuri.com/blog/2026/frames2lora-explained/" rel="alternate" type="text/html" title="Turning a video into a LoRA adapter: Frames2LoRA explained" /><published>2026-09-14T12:00:00+00:00</published><updated>2026-09-14T12:00:00+00:00</updated><id>https://manansuri.com/blog/2026/frames2lora-explained</id><content type="html" xml:base="https://manansuri.com/blog/2026/frames2lora-explained/"><![CDATA[<p>Ask a vision-language model a question about a video and it pays twice. First it encodes every frame into hundreds of visual tokens. Then it pays that cost again on the next question, and the one after that, because the video has to sit in the context window every time. A few dozen frames is already tens of thousands of tokens before you have typed a word. Push past the model’s capacity and it does not degrade gracefully: it starts emitting repetitive or unrelated text.</p>
+
+<p>Most of the work on this problem tries to fit more video into the window: subsample frames, merge tokens, stretch the context, stream through a memory buffer. All of these help, and all of them leave visual tokens in context at query time. Frames2LoRA, which I worked on with Sarvesh Baskar and Dinesh Manocha at UMD, asks a different question. What if the video is not in the context at all?</p>
+
+<h2 id="the-idea">The idea</h2>
+
+<p>LoRA adapters are usually trained: you run gradient descent on a small low-rank update to a frozen model. Frames2LoRA predicts the adapter instead. A hypernetwork looks at a video once and emits LoRA weights in a single forward pass, with no gradient updates. Attach that adapter to the frozen VLM and it now “knows” the video. Every later question is answered from the text prompt alone, with zero visual tokens in context.</p>
+
+<p>Doc-to-LoRA showed this works for text documents. Video is harder in three ways: the token volume per example is orders of magnitude larger, the compression is cross-modal (visual content has to become perturbations to a language model’s weights), and video varies along a resolution axis that text does not have.</p>
+
+<h2 id="how-it-works">How it works</h2>
+
+<figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/papers/frames2lora/hero-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/papers/frames2lora/hero-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/papers/frames2lora/hero-1400.webp" />
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/papers/frames2lora/hero.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+  </picture><figcaption class="caption">Training (left): a frozen VLM encodes the video; the Perceiver hypernetwork reads its layer-wise hidden states and generates LoRA factors, which are injected into a second frozen copy of the VLM that is trained against teacher captions. Inference (right): generate the adapter once, then answer any text query with no video tokens.</figcaption>
+
+</figure>
+
+<p>There are three pieces, and only one of them is trained.</p>
+
+<p>A frozen SmolVLM2 acts as the video encoder. We feed it the sampled frames plus an internalization instruction and keep the text-side hidden states from every transformer layer, so the hypernetwork sees a layer-indexed stack rather than one pooled vector.</p>
+
+<p>The Perceiver hypernetwork is the trainable part. For each layer, a resampler attends from learned latent queries to that layer’s hidden states, and a decoder emits one latent per target module and LoRA rank direction. A shared projection head turns each latent into the A and B factors. The B-side scale starts at zero, so the untrained adapter is a no-op.</p>
+
+<p>The same frozen SmolVLM2 serves as the answer model, with the generated adapter added to the MLP down-projections of its text decoder at rank 16. Training is plain teacher-forced cross-entropy: a frozen teacher that saw the frames writes captions and summaries, and the student has to reproduce them from the prompt and the adapter alone. We trained on FineVideo spans at 12 frames and 384px, with audio excluded, for the 500M and 2.2B SmolVLM2 models.</p>
+
+<h2 id="what-we-found">What we found</h2>
+
+<p>We compared against the same model reading the video directly, with identical frames, prompts, and decoding, using token-F1 and an LLM judge that agrees with humans at Spearman 0.823, and we ran formal non-inferiority and equivalence tests rather than eyeballing means.</p>
+
+<ul>
+  <li>On all five captioning benchmarks (ActivityNet Captions, PLM-RDCap, PLM-RCap, VDC, CaReBench), at both scales, Frames2LoRA is statistically non-inferior and equivalent to video-in-context inference. It recovers 91.9% of the base judge score at 2.2B and 84.2% at 500M.</li>
+  <li>Video QA was never in training, yet the judge passes 7 of 8 benchmark-scale pairings, and on NExT-QA the adapter beats the base at both scales.</li>
+  <li>Trained at 12 frames, the model stays stable through 1,024 frames and 1024px. In that regime direct inference degenerates and Frames2LoRA comes out ahead by 0.12 to 0.13 token-F1. Across the sweep, query TTFT drops 6.7x on average at 500M and 20.1x at 2.2B (maximum 79.1x), and answer-time input tokens drop by up to 1,507x.</li>
+  <li>On VidCapBench, where each video has about 15 questions, average TTFT falls from 7.06s to 0.58s at 2.2B including the one-time internalization cost.</li>
+</ul>
+
+<p>One result surprised us. Internalize the two halves of a video separately, concatenate the LoRA ranks, and the composed adapter keeps 93.1% (500M) and 86.2% (2.2B) of the single-adapter score, with no training for composition.</p>
+
+<h2 id="try-it">Try it</h2>
+
+<ul>
+  <li>Paper page on this site: <a href="/papers/frames2lora/">/papers/frames2lora/</a></li>
+  <li>arXiv: <a href="https://arxiv.org/abs/2606.04351">2606.04351</a> (v1 was titled Video2LoRA)</li>
+  <li>Code: <a href="https://github.com/frames2lora/Frames2LoRA">github.com/frames2lora/Frames2LoRA</a></li>
+  <li>Checkpoints: <a href="https://huggingface.co/MananSuri27/Frames2LoRA-SmolVLM-ckpts">Frames2LoRA-SmolVLM-ckpts on Hugging Face</a></li>
+  <li>Project page: <a href="https://frames2lora.github.io/">frames2lora.github.io</a></li>
+  <li>The audio-visual follow-up: <a href="/papers/omni2lora/">Omni2LoRA</a></li>
+</ul>]]></content><author><name></name></author><category term="research" /><category term="video" /><category term="vlm" /><category term="lora" /><category term="hypernetworks" /><summary type="html"><![CDATA[How Frames2LoRA lets a frozen vision-language model answer questions about a video with zero visual tokens in context, and where it still falls short.]]></summary></entry><entry><title type="html">Ask fewer, better questions: SAGE-Agent and ClarifyBench explained</title><link href="https://manansuri.com/blog/2026/sage-clarification-explained/" rel="alternate" type="text/html" title="Ask fewer, better questions: SAGE-Agent and ClarifyBench explained" /><published>2026-09-14T12:00:00+00:00</published><updated>2026-09-14T12:00:00+00:00</updated><id>https://manansuri.com/blog/2026/sage-clarification-explained</id><content type="html" xml:base="https://manansuri.com/blog/2026/sage-clarification-explained/"><![CDATA[<p>Ask an assistant to “text Maya and see if she can pick up the party supplies on Saturday” and it has a choice to make. Maya has a work number and a home number. Send to the default and you may have just messaged her office on a weekend. Ask “which number?” every time and the assistant becomes tedious. Tool-calling agents face this trade-off on every request and often get it wrong in both directions: they hallucinate the missing argument, or they ask about things the schema already settles.</p>
+
+<p>Our ACL 2026 Findings paper, <a href="/papers/sage-clarification/">Structured Uncertainty Guided Clarification for LLM Agents</a>, argues that the mistake is where the uncertainty lives. Existing methods reason about ambiguity in token space, by prompting the model to write a clarifying question as free text. We move it into the space of tool parameters and their domains, and the decision becomes something you can compute.</p>
+
+<h2 id="the-idea">The idea</h2>
+
+<p>Every tool has a schema: a set of parameters, the domain each one can take, and which are required. A candidate tool call is a partial assignment of those parameters, with some marked unknown. If the agent keeps a probability distribution over candidate calls, then “how uncertain am I?” has a precise meaning, and so does “how much would this question help?”</p>
+
+<p>That second quantity is the Expected Value of Perfect Information (EVPI), an old idea from Bayesian decision theory. For a candidate question, imagine the user answers it perfectly: how much does the probability of the best candidate call rise in expectation? That is the value of asking. We subtract a cost that grows each time the question touches an aspect (one parameter of one tool) that has already been queried. Ask the question with the highest net value; when that drops below a threshold, stop and execute.</p>
+
+<p>Two things fall out of this. First, the agent separates specification uncertainty (the user has not said) from model uncertainty (the LLM is unsure), because the belief is defined over the schema rather than over generated text. Second, questions whose answers cannot change the best tool call have zero EVPI, so the “which Alex?” question from the figure below never gets asked when only one Alex has a work number.</p>
+
+<h2 id="how-it-works">How it works</h2>
+
+<figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/papers/sage-clarification/hero-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/papers/sage-clarification/hero-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/papers/sage-clarification/hero-1400.webp" />
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/papers/sage-clarification/hero.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+  </picture><figcaption class="caption">SAGE-Agent inserts a structured clarification loop into the Reason stage of a standard Reason-Act-Observe agent. Candidate tool calls with unknown parameters are scored for uncertainty; if it is high, candidate questions are scored by EVPI minus a redundancy cost, and the agent asks or executes based on a dynamic threshold.</figcaption>
+
+</figure>
+
+<p>SAGE-Agent (Structured Argument Uncertainty guided Elicitation Agent) runs in five steps.</p>
+
+<ol>
+  <li><strong>Candidate generation.</strong> An LLM reads the query and observation history and proposes candidate tool calls, filling each parameter with a value or <code class="language-plaintext highlighter-rouge">&lt;UNK&gt;</code>. Belief over candidates comes from a uniform tool prior and per-parameter certainty, which falls with the size of an unspecified parameter’s domain.</li>
+  <li><strong>Question generation.</strong> If the best candidate is not confident enough, the LLM drafts candidate questions, each tagged with the candidate it targets and the aspects it would resolve.</li>
+  <li><strong>Scoring and selection.</strong> For each question, we simulate perfect resolution of its aspects and compute EVPI, subtract the redundancy cost, and pick the maximum. If that maximum is below the stopping threshold, execute the best call instead.</li>
+  <li><strong>Belief update.</strong> The user’s answer becomes constraints on parameter domains: explicit values, cross-parameter dependencies, or exclusions such as “not business class”. Beliefs are renormalized and aspect counters incremented.</li>
+  <li><strong>Termination and error recovery.</strong> The loop ends on high confidence, low question value, or a step cap. If a call fails at runtime, the agent proposes a corrected call or an error-specific question and re-enters scoring.</li>
+</ol>
+
+<p>We needed somewhere to evaluate this, so we also built <strong>ClarifyBench</strong>: 716 multi-turn tasks across document processing, vehicle control, stock trading, travel, and file systems, using 92 tools. An LLM-based user simulator holds the true intent, answers questions, and issues follow-up requests. Tasks are split into explicit, ambiguous, and infeasible queries, the last of which should be declined rather than executed, and every generated query was checked by two annotators.</p>
+
+<h2 id="what-we-found">What we found</h2>
+
+<ul>
+  <li>On ambiguous tasks with GPT-4o, SAGE-Agent reaches 59.73% Coverage (a fully correct tool call) versus 55.70% for the strongest baseline, Domain-aware ReAct, and does it with 1.39 questions per task instead of 2.56 to 3.42.</li>
+  <li>Across baselines and both base models, that works out to 7-39% higher coverage on ambiguous tasks with 1.5-2.7x fewer questions.</li>
+  <li>Active Task Disambiguation, the closest uncertainty-based method, needs about 24K tokens and 40 LLM calls per task because it estimates entropy over sampled solutions. SAGE-Agent uses about 22K tokens with 54% fewer calls.</li>
+  <li>The same belief works as a training signal. Weighting a GRPO reward by certainty lifts When2Call accuracy from 36.5% to 65.2% for Qwen2.5-3B and from 36.7% to 62.9% for Qwen2.5-7B. The 3B model with our reward beats the 7B model trained with the standard reward (45.1%).</li>
+</ul>
+
+<h2 id="try-it">Try it</h2>
+
+<ul>
+  <li>Paper page: <a href="/papers/sage-clarification/">/papers/sage-clarification/</a></li>
+  <li>arXiv: <a href="https://arxiv.org/abs/2511.08798">2511.08798</a></li>
+  <li>Code and benchmark: <a href="https://github.com/MananSuri27/ClarifyBench">github.com/MananSuri27/ClarifyBench</a></li>
+  <li>ACL Anthology: <a href="https://aclanthology.org/2026.findings-acl.2028/">2026.findings-acl.2028</a></li>
+</ul>]]></content><author><name></name></author><category term="research" /><category term="agents" /><category term="tool-use" /><category term="clarification" /><category term="uncertainty" /><summary type="html"><![CDATA[How modeling uncertainty over tool parameters, not tokens, lets an LLM agent decide which clarifying question to ask and when to stop asking.]]></summary></entry><entry><title type="html">Answering questions over a pile of PDFs: VisDoM explained</title><link href="https://manansuri.com/blog/2026/visdom-explained/" rel="alternate" type="text/html" title="Answering questions over a pile of PDFs: VisDoM explained" /><published>2026-09-14T12:00:00+00:00</published><updated>2026-09-14T12:00:00+00:00</updated><id>https://manansuri.com/blog/2026/visdom-explained</id><content type="html" xml:base="https://manansuri.com/blog/2026/visdom-explained/"><![CDATA[<p>Most document QA demos start with one PDF. You upload it, you ask a question, the model answers. Real work does not look like that. An analyst has a folder of quarterly reports, a researcher has forty papers on a topic, and the question is “which model did best on the Ubuntu dataset for texts between 60 and 90 words?” The answer is one cell in one table in one of those files. Getting there means finding the right document, the right page, and then reading a table rather than a paragraph.</p>
+
+<p>Our NAACL 2025 paper, <a href="/papers/visdom/">VisDoM</a>, is about that setting: question answering over a collection of documents where the evidence is often visual. It contributes a benchmark, VisDoMBench, and a retrieval-augmented method, VisDoMRAG.</p>
+
+<h2 id="the-idea">The idea</h2>
+
+<p>Two things were missing when we started. First, multi-document QA benchmarks were text-only, and multimodal document QA benchmarks were single-document. Nobody had measured how systems behave when both problems show up at once. Second, there was a practical question with no clear answer: for documents that mix text with tables, charts, and slides, should a RAG system retrieve page images, extracted text, or both?</p>
+
+<p>Our answer is both, but not by stuffing everything into one prompt. VisDoMRAG runs a visual RAG pipeline and a textual RAG pipeline independently, makes each one reason explicitly, and then has an LLM check the two reasoning chains against each other before committing to an answer. The consistency check is the part that matters: it is where a number read off a table gets reconciled with the sentence in the text that describes it.</p>
+
+<h2 id="how-it-works">How it works</h2>
+
+<figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/papers/visdom/hero-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/papers/visdom/hero-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/papers/visdom/hero-1400.webp" />
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/papers/visdom/hero.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+  </picture><figcaption class="caption">VisDoMRAG. A visual branch retrieves page images with a visual retriever; a textual branch retrieves OCR text chunks. Each branch curates evidence, reasons step by step, and answers. A modality fusion step compares the two reasoning chains for consistency and produces the final answer.</figcaption>
+
+</figure>
+
+<p><strong>Building the benchmark.</strong> VisDoMBench re-purposes five existing datasets that have public source documents and grounded evidence: PaperTab and FetaTab for tables, SciGraphQA and SPIQA for charts and tables in scientific papers, and SlideVQA for multi-hop questions over slide decks. We de-duplicated questions across splits, dropped trivial ones, and then made each question multi-document by adding distractor documents until every query spans roughly 50 to 200 pages. Questions that could be answered by more than one document were rewritten with GPT-4o and checked by a human annotator. The final benchmark has 2,271 questions over 1,277 documents, about 129 pages per query on average.</p>
+
+<p><strong>Two retrieval branches.</strong> The textual branch OCRs the PDFs, splits the text into 3,000-character chunks, embeds them, and retrieves the top chunks for the query. The visual branch skips OCR entirely: it embeds every page as an image with a late-interaction retriever (ColPali or ColQwen2) and retrieves the top pages, which are fed to a multimodal LLM as pictures.</p>
+
+<p><strong>Three-step prompting.</strong> In both branches the LLM is not asked to answer directly. It first does evidence curation, pulling out the paragraphs, table rows, or figure details that matter and writing them down. Then it does chain-of-thought reasoning over that evidence. Only then does it answer, in a format matched to the question type. Curation is what keeps distractor documents from polluting the answer.</p>
+
+<p><strong>Modality fusion.</strong> The last step takes the curated evidence, reasoning chains, and answers from both branches and asks an LLM to evaluate whether they agree. When they conflict, it re-examines the evidence and resolves the disagreement. This is late fusion, deliberately different from early fusion, where the OCR text of the retrieved pages is appended to the image prompt.</p>
+
+<h2 id="what-we-found">What we found</h2>
+
+<ul>
+  <li>VisDoMRAG beats long-context, text-only RAG, and visual-only RAG for every LLM we tried. With GPT-4o the average score across the five splits is 50.01, against 49.02 for visual RAG, 37.33 for text RAG, and 32.78 for dumping everything into a long context. Across the benchmark the gain over the baselines is 12-20%.</li>
+  <li>The biggest win is for the small open model. Qwen2-VL-7B goes from 12.09 with long context to 39.94 with VisDoMRAG, because retrieval and structured reasoning make up for weak long-context ability.</li>
+  <li>Visual retrieval is the stronger retriever here. ColQwen2 finds the correct source document 96.94% of the time at k=5, versus 92.40% for the best text retriever. On slides the gap is dramatic: dense text retrievers fall below 1% because slides have almost no running text, while BM25 and the visual retrievers stay above 97%.</li>
+  <li>Late fusion beats early fusion (50.01 vs 43.63 with GPT-4o), and removing evidence curation and chain-of-thought prompting drops VisDoMRAG to 45.98.</li>
+</ul>
+
+<h2 id="try-it">Try it</h2>
+
+<ul>
+  <li>Paper page on this site: <a href="/papers/visdom/">/papers/visdom/</a></li>
+  <li>arXiv: <a href="https://arxiv.org/abs/2412.10704">2412.10704</a>; ACL Anthology: <a href="https://aclanthology.org/2025.naacl-long.310/">2025.naacl-long.310</a></li>
+  <li>Code and the VisDoMBench splits: <a href="https://github.com/MananSuri27/VisDoM">github.com/MananSuri27/VisDoM</a></li>
+</ul>]]></content><author><name></name></author><category term="research" /><category term="rag" /><category term="multimodal" /><category term="documents" /><category term="benchmarks" /><summary type="html"><![CDATA[Why multi-document QA breaks when the answer is in a table or a chart, and how VisDoMRAG fuses visual and textual retrieval to fix it.]]></summary></entry><entry><title type="html">A Dummy’s Guide to Word2Vec</title><link href="https://manansuri.com/blog/2022/a-dummys-guide-to-word2vec/" rel="alternate" type="text/html" title="A Dummy’s Guide to Word2Vec" /><published>2022-01-21T12:06:00+00:00</published><updated>2022-01-21T12:06:00+00:00</updated><id>https://manansuri.com/blog/2022/a-dummys-guide-to-word2vec</id><content type="html" xml:base="https://manansuri.com/blog/2022/a-dummys-guide-to-word2vec/"><![CDATA[<p><em>Originally published on <a href="https://medium.com/@manansuri/a-dummys-guide-to-word2vec-456444f3c673">Medium</a> in January 2022; migrated and lightly updated in September 2026. The code has been updated for Gensim 4 (<code class="language-plaintext highlighter-rouge">size</code> → <code class="language-plaintext highlighter-rouge">vector_size</code>, <code class="language-plaintext highlighter-rouge">iter</code> → <code class="language-plaintext highlighter-rouge">epochs</code>, <code class="language-plaintext highlighter-rouge">wv.vocab</code> → <code class="language-plaintext highlighter-rouge">wv.index_to_key</code>), and a short postscript on what Word2Vec still teaches us in the LLM era has been added at the end.</em></p>
 
 <figure>
 
