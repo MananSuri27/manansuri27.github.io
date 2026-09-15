@@ -25,7 +25,9 @@
     {%- else -%}
         {%- capture title -%}{{ site.title }}{%- endcapture -%}
     {%- endif -%}
-    {% if page.url == '/blog/index.html' %}
+    {% if page.seo_title %}
+        {{ page.seo_title }}
+    {%- elsif page.url == '/blog/index.html' %}
         {{ site.blog_nav_title }} | {{ title }}
     {%- elsif page.title != "blank" and page.url != "/" -%}
         {%- if page.title == nil or page.title == "" -%}
@@ -42,6 +44,15 @@
 {%- if page.keywords or site.keywords %}
     <meta name="keywords" content="{%- if page.keywords -%}{{ page.keywords }}{%- else -%}{{ site.keywords }}{%- endif -%}" />
 {%- endif %}
+{%- assign is_archive = false -%}
+{%- if page.layout contains "archive" or page.url contains "/blog/tag/" or page.url contains "/blog/category/" or page.url contains "/blog/page/" %}
+    {%- assign is_archive = true -%}
+{%- endif -%}
+{%- if is_archive or page.noindex %}
+    <meta name="robots" content="noindex, follow" />
+{%- endif %}
+    <link rel="alternate" type="application/rss+xml" title="{{ title }}" href="{{ '/feed.xml' | absolute_url }}" />
+    <link rel="alternate" type="text/plain" title="LLM-friendly site summary" href="{{ '/llms.txt' | absolute_url }}" />
 
 {%- assign is_blog_post = false -%}
 {%- if page.url != '/blog/index.html' and page.url contains '/blog/' -%}
@@ -63,7 +74,7 @@
     <meta property="og:locale" content="{{ site.lang }}" />
 
     <!-- Twitter card -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="{%- if page.og_image or site.og_image -%}summary_large_image{%- else -%}summary{%- endif -%}" />
     <meta name="twitter:title" content="{%- if page.title and page.url != "/" -%}{{ page.title }} | {{ title }}{%- else -%}{{ title }}{%- endif -%}" />
     <meta name="twitter:description" content="{%- if page.description -%}{{ page.description }}{%- else -%}{{ site.description }}{%- endif -%}" />
     {% if page.og_image or site.og_image -%}
@@ -230,12 +241,27 @@
         "familyName": "{{ site.last_name }}",
         "url": "{{ site.url }}{{ site.baseurl }}/",
         "image": "{{ site.og_image }}",
+        "@id": "{{ site.url }}{{ site.baseurl }}/#person",
+        "description": {{ site.description | strip | jsonify }},
+        "mainEntityOfPage": "{{ site.url }}{{ site.baseurl }}/",
         "jobTitle": "PhD student in Computer Science",
         "affiliation": {
             "@type": "CollegeOrUniversity",
             "name": "University of Maryland, College Park",
             "url": "https://www.cs.umd.edu/"
         },
+        "worksFor": {
+            "@type": "Organization",
+            "name": "GAMMA Lab, University of Maryland",
+            "url": "https://gamma.umd.edu/"
+        },
+        {% if site.orcid_id -%}
+        "identifier": {
+            "@type": "PropertyValue",
+            "propertyID": "ORCID",
+            "value": "https://orcid.org/{{ site.orcid_id }}"
+        },
+        {%- endif %}
         "alumniOf": {
             "@type": "CollegeOrUniversity",
             "name": "Netaji Subhas University of Technology"
@@ -258,6 +284,10 @@
         "@type": "{%- if is_blog_post -%}BlogPosting{%- else -%}WebSite{%- endif -%}",
         "description": "{%- if page.description -%}{{ page.description }}{%- else if site.description -%}{{ site.description }}{%- endif -%}",
         "headline": "{%- if page.title -%}{{ page.title }}{%- else -%}{{ site.title }}{%- endif -%}",
+        {% if is_blog_post and page.date -%}
+        "datePublished": "{{ page.date | date_to_xmlschema }}",
+        "dateModified": "{{ page.last_modified_at | default: page.date | date_to_xmlschema }}",
+        {%- endif %}
         {% if sameaslinks != blank -%}
         "sameAs": {{ sameaslinks }},
         {%- endif %}

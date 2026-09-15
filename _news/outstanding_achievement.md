@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Received an Outstanding Achievement award for contributions to the CS Graduate Program (2025–2026).
+Received the Outstanding Achievement award for contributions to the UMD CS Graduate Program (2025–2026).

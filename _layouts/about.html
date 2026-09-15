@@ -23,10 +23,11 @@ layout: default
                 {%- assign profile_image_class = "img-fluid z-depth-1 rounded" -%}
               {% endif %}
 
+              {%- capture profile_alt -%}Photo of {{ site.first_name }} {{ site.last_name }}{%- endcapture -%}
               {% include figure.html
               path=profile_image_path
               class=profile_image_class
-              alt=page.profile.image
+              alt=profile_alt
               cache_bust=true -%}
             {% endif -%}
             {%- if page.profile.address %}
@@ -51,6 +52,12 @@ layout: default
           {% if page.press -%}
             <h2>press</h2>
             {%- include press.html %}
+          {%- endif %}
+
+          <!-- Talks -->
+          {% if page.talks -%}
+            <h2>talks</h2>
+            {%- include talks.html %}
           {%- endif %}
 
           <!-- Service -->

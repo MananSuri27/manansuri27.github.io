@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Our paper "Follow the Flow: Fine-grained Flowchart Attribution with Neurosymbolic Agents" was accepted at EMNLP 2025, main conference!
+Our paper "Follow the Flow: Fine-grained Flowchart Attribution with Neurosymbolic Agents" was accepted at EMNLP 2025 (main conference).

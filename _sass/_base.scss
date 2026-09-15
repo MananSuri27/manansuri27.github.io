@@ -549,6 +549,7 @@ footer.sticky-bottom {
 // Publications
 
 .press,
+.talks,
 .service {
   ul {
     padding-left: 1.2rem;
@@ -611,6 +612,19 @@ footer.sticky-bottom {
         &:empty {
           height: 0;
           margin-bottom: 0;
+        }
+
+        // With a preview figure, let the column grow and stack the badge under it.
+        &.preview {
+          height: auto;
+
+          figure {
+            margin-bottom: 0.4rem;
+          }
+
+          abbr {
+            margin-bottom: 0.5rem;
+          }
         }
 
         abbr {

@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Earned my MS in Computer Science from University of Maryland, continuing toward my PhD at UMD.
+Earned my MS in Computer Science from the University of Maryland, continuing toward the PhD.

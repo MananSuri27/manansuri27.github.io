@@ -1,0 +1,11 @@
+# Invited talks, newest first. Rendered by _includes/talks.html on the homepage.
+# Optional per-talk fields: slides (URL or /assets/pdf/... path), video, url.
+- title: "From Language Models to Agents: Foundations, Frameworks, and Future Challenges"
+  venue: Illinois Institute of Technology
+  date: December 2025
+- title: "Fine-grained Visual Attribution"
+  venue: Adobe, San Jose
+  date: August 2025
+- title: "Detecting Green Messaging and an Exploration into Greenwashing"
+  venue: DataFest 2023, The Shard, London
+  date: August 2023

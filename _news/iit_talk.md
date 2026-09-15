@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I delivered a talk "From Language Models to Agents: Foundations, Frameworks, and Future Challenges" at Illinois Institute of Technology.
+Gave an invited talk, "From Language Models to Agents: Foundations, Frameworks, and Future Challenges", at Illinois Institute of Technology.

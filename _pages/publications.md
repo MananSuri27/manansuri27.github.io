@@ -12,3 +12,8 @@ nav_order: 1
 {% bibliography -f {{ site.scholar.bibliography }} %}
 
 </div>
+
+{%- capture pubgraph -%}{% bibliography -f {{ site.scholar.bibliography }} -T bib-jsonld -g none %}{%- endcapture -%}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"{{ site.url }}/#person","name":"Manan Suri","url":"{{ site.url }}/"}{{ pubgraph | strip_html | strip }}]}
+</script>

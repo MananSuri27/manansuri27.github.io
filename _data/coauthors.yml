@@ -1,37 +1,35 @@
-"Adams":
-  - firstname: ["Edwin", "E.", "E. P.", "Edwin Plimpton"]
-    url: https://en.wikipedia.org/wiki/Edwin_Plimpton_Adams
+# Coauthor links shown on the publications page (matched by last name + first name).
+"Manocha":
+  - firstname: ["Dinesh"]
+    url: https://www.cs.umd.edu/people/dmanocha
 
-"Podolsky":
-  - firstname: ["Boris", "B.", "B. Y.", "Boris Yakovlevich"]
-    url: https://en.wikipedia.org/wiki/Boris_Podolsky
+"Mathur":
+  - firstname: ["Puneet"]
+    url: https://research.adobe.com/person/puneet-mathur/
 
-"Rosen":
-  - firstname: ["Nathan", "N."]
-    url: https://en.wikipedia.org/wiki/Nathan_Rosen
+"Dernoncourt":
+  - firstname: ["Franck"]
+    url: https://research.adobe.com/person/franck-dernoncourt/
 
-"Bach": 
-  - firstname: ["Johann Sebastian", "J. S."]
-    url: https://en.wikipedia.org/wiki/Johann_Sebastian_Bach
+"Rossi":
+  - firstname: ["Ryan A.", "Ryan"]
+    url: https://ryanrossi.com/
 
-  - firstname: ["Carl Philipp Emanuel", "C. P. E."]
-    url: https://en.wikipedia.org/wiki/Carl_Philipp_Emanuel_Bach
+"Lipka":
+  - firstname: ["Nedim"]
+    url: https://research.adobe.com/person/nedim-lipka/
 
-"Przibram":
-  - firstname: ["Karl"]
-    url: https://link.springer.com/article/10.1007/s00016-019-00242-z
+"Ghosh":
+  - firstname: ["Sreyan"]
+    url: https://sreyan88.github.io/
 
-"Schrödinger":
-  - firstname: ["Erwin"]
-    url: https://en.wikipedia.org/wiki/Erwin_Schr%C3%B6dinger
+"Nakov":
+  - firstname: ["Preslav"]
+    url: https://mbzuai.ac.ae/study/faculty/preslav-nakov/
 
-"Lorentz":
-  - firstname: ["Hendrik Antoon"]
-    url: https://en.wikipedia.org/wiki/Hendrik_Lorentz
-
-"Planck":
-  - firstname: ["Max"]
-    url: https://en.wikipedia.org/wiki/Max_Planck
+"Gupta":
+  - firstname: ["Vivek"]
+    url: https://vgupta123.github.io/
 
 "Chaudhary":
   - firstname: ["Divya"]
@@ -44,10 +42,6 @@
 "Kumar":
   - firstname: ["Bijendra"]
     url: http://nsut.ac.in/en/node/242
-
-"Manocha":
-- firstname: ["Dinesh"]
-  url: https://www.cs.umd.edu/people/dmanocha
 
 "Shah":
   - firstname: ["Rajiv Ratn"]

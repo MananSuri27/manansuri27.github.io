@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I gave a talk at Adobe World HQ, San Jose, titled "Fine-grained Visual Attribution".
+Gave an invited talk, "Fine-grained Visual Attribution", at Adobe headquarters in San Jose.

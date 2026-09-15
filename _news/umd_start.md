@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I have begun my MS in Computer Science at the University of Maryland, College Park.
+Started my MS in Computer Science at the University of Maryland, College Park.

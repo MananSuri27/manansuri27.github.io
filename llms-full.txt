@@ -1,0 +1,53 @@
+---
+permalink: /llms-full.txt
+layout: none
+sitemap: false
+---
+# Manan Suri — full site text for LLMs
+
+Canonical: {{ site.url }}/ · Short index: {{ site.url }}/llms.txt
+
+## About
+
+Manan Suri is a PhD student in Computer Science at the University of Maryland, College Park, advised by Prof. Dinesh Manocha at the GAMMA Lab (https://www.cs.umd.edu/people/manans). He is not the IIT Delhi professor of the same name.
+
+{{ site.pages | where: "permalink", "/" | map: "content" | first | markdownify | strip_html | strip }}
+
+## News
+
+{% assign news = site.news | sort: "date" | reverse -%}
+{% for item in news -%}
+- {{ item.date | date: "%Y-%m-%d" }}: {{ item.content | markdownify | strip_html | strip }}
+{% endfor %}
+## Press
+
+{% for item in site.data.press -%}
+- "{{ item.title }}", {{ item.outlet }}, {{ item.date }}. {{ item.summary }} {{ item.url }}
+{% endfor %}
+## Talks
+
+{% for talk in site.data.talks -%}
+- "{{ talk.title }}", {{ talk.venue }}, {{ talk.date }}.
+{% endfor %}
+## Service
+
+{% for group in site.data.service -%}
+- {{ group.role }}: {% for i in group.items %}{{ i.text | strip_html }}{% unless forloop.last %}; {% endunless %}{% endfor %}
+{% endfor %}
+## Publications (reverse chronological)
+
+{% capture pubs %}{% bibliography -T bib-llms -g none %}{% endcapture %}{{ pubs | strip_html | strip }}
+
+## Blog posts
+
+{% for post in site.posts -%}
+- {{ post.date | date: "%Y-%m-%d" }}: {{ post.title }} — {{ site.url }}{{ post.url }}. {{ post.description }}
+{% endfor %}
+## Links
+
+- X: https://x.com/{{ site.twitter_username }}
+- GitHub: https://github.com/{{ site.github_username }}
+- Google Scholar: https://scholar.google.com/citations?user={{ site.scholar_userid }}
+- Semantic Scholar: https://www.semanticscholar.org/author/{{ site.semanticscholar_id }}
+- ORCID: https://orcid.org/{{ site.orcid_id }}
+- LinkedIn: https://www.linkedin.com/in/{{ site.linkedin_username }}

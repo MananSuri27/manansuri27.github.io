@@ -2,6 +2,7 @@
 layout: page
 permalink: /repositories/
 title: repositories
+description: Open-source code from Manan Suri, including Frames2LoRA, ACLM, CoSyn, and other NLP and agent research repositories.
 # description: Cringe page edited a bit to remove "trophies" and "github stats" Edit the `_data/repositories.yml` and change the `github_users` and `github_repos` lists to include your own GitHub profile and repositories.
 nav: true
 nav_order: 3

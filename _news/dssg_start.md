@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Started the Data Science for Social Good Fellowship at the University of warwick
+Started the Data Science for Social Good Fellowship at the University of Warwick.

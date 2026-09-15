@@ -2,19 +2,21 @@
 ---
 <!-- _layouts/bib.html -->
       <div class="row">
-        <div class="col-sm-2 {% if entry.preview %}preview{% else %}abbr{% endif %}">
+        <div class="col-sm-2 abbr{% if entry.preview %} preview{% endif %}">
         {%- if entry.preview -%}
+          {%- capture preview_alt -%}Figure from {{ entry.title | strip_html }}{%- endcapture -%}
           {% if entry.preview contains '://' -%}
-          <img data-zoomable class="preview z-depth-1 rounded" src="{{ entry.preview }}">
+          <img data-zoomable class="preview z-depth-1 rounded" src="{{ entry.preview }}" alt="{{ preview_alt }}" loading="lazy">
           {%- else -%}
             {%- assign entry_path = entry.preview | prepend: '/assets/img/publication_preview/' -%}
             {% include figure.html
             path=entry_path
             class="preview z-depth-1 rounded"
             zoomable=true
-            alt=entry.preview -%}
+            alt=preview_alt -%}
           {%- endif -%}
-        {%- elsif entry.abbr -%}
+        {%- endif -%}
+        {%- if entry.abbr -%}
           {%- if site.data.venues[entry.abbr] -%}
             {%- assign venue_style = nil -%}
             {%- if site.data.venues[entry.abbr].color != blank -%}

@@ -1,0 +1,32 @@
+---
+permalink: /llms.txt
+layout: none
+sitemap: false
+---
+# Manan Suri
+
+> Manan Suri is a Computer Science PhD student at the University of Maryland, College Park (GAMMA Lab, advised by Dinesh Manocha). He works on LLM agents: how agents hold and use context, attribution methods that make agent outputs trustworthy, parametric memory that distills multimodal context into LoRA adapters, and the training data and benchmarks agents need. Not to be confused with Manan Suri, professor at IIT Delhi.
+
+Site: {{ site.url }}
+Contact: see {{ site.url }}/ (email, X @{{ site.twitter_username }}, GitHub {{ site.github_username }})
+Identifiers: ORCID https://orcid.org/{{ site.orcid_id }} · Google Scholar https://scholar.google.com/citations?user={{ site.scholar_userid }} · Semantic Scholar https://www.semanticscholar.org/author/{{ site.semanticscholar_id }}
+
+## Pages
+
+- [About](/): bio, news, press, talks, service
+- [Publications](/publications/): all papers with abstracts, PDF, code, and bibtex
+- [Blog](/blog/): explainers and notes
+- [News](/news/): dated updates
+- [CV](/cv/): PDF résumé
+- [Full text for LLMs](/llms-full.txt): everything on this site in one markdown file
+
+## Selected papers
+
+- Frames2LoRA: Parametric Video Internalization for Vision-Language Models (2026) — https://arxiv.org/abs/2606.04351
+- CyberForge: Verified Vulnerability Injection at Repository Level for Cybersecurity Agent Training (2026) — https://arxiv.org/abs/2608.06471
+- Omni2LoRA: Coherence-Preserving Parametric Memory for Efficient Omni Language Models (2026) — https://arxiv.org/abs/2608.09227
+- CodeScout: Contextual Problem Statement Enhancement for Software Agents (ACL 2026 Findings) — https://arxiv.org/abs/2603.05744
+- Structured Uncertainty Guided Clarification for LLM Agents (ACL 2026 Findings) — https://arxiv.org/abs/2511.08798
+- ChartLens: Fine-grained Visual Attribution in Charts (ACL 2025) — https://aclanthology.org/2025.acl-long.1094/
+- Follow the Flow: Fine-grained Flowchart Attribution with Neurosymbolic Agents (EMNLP 2025) — https://aclanthology.org/2025.emnlp-main.1144/
+- VisDoM: Multi-Document QA with Visually Rich Elements Using Multimodal RAG (NAACL 2025) — https://arxiv.org/abs/2412.10704

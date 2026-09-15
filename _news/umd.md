@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I have been offered to study MS in Computer Science at University of Maryland, College Park. I am excited to announce that I will be starting my MS in fall 2024.
+Admitted to the MS in Computer Science program at the University of Maryland, College Park. Starting in fall 2024.

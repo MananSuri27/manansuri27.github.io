@@ -65,7 +65,7 @@ max_width: 800px
 # Display links to the page with a preview object on social media.
 serve_og_meta: true # Include Open Graph meta tags in the HTML head
 serve_schema_org: true # Include Schema.org in the HTML head
-og_image: https://manansuri.com/assets/img/manansuri.jpeg # The site-wide (default for all links) Open Graph preview image
+og_image: https://manansuri.com/assets/img/og-card.png # The site-wide (default for all links) Open Graph preview image (1200x630)
 
 # -----------------------------------------------------------------------------
 # Social integration
@@ -171,7 +171,7 @@ collections:
   news:
     defaults:
       layout: post
-    output: true
+    output: false # news items are shown inline on / and /news/; no thin per-item pages
     permalink: /news/:path/
   projects:
     output: true
@@ -211,6 +211,14 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - Dockerfile
+  - docker-compose.yml
+  - docker-local.yml
+  - LICENSE
+  - README.md
+  - reports
+  - .pre-commit-config.yaml
+  - .dockerignore
 keep_files:
   - CNAME
   - .nojekyll
@@ -246,7 +254,7 @@ defaults:
 # -----------------------------------------------------------------------------
 
 jekyll-minifier:
-  exclude: ['robots.txt']
+  exclude: ['robots.txt', 'llms.txt', 'llms-full.txt', 'feed.xml', 'sitemap.xml']
   uglifier_args:
     harmony: true
 

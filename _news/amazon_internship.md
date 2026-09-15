@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I have joined Amazon as an Applied Scientist Intern in the agentic developer tools team (Amazon Q). 
+Joined Amazon as an Applied Scientist Intern on the agentic developer tools team (Amazon Q), working on software engineering agents.

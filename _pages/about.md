@@ -1,6 +1,7 @@
 ---
 layout: about
 title: about
+seo_title: Manan Suri | CS PhD student, University of Maryland
 permalink: /
 subtitle: CS PhD student at the University of Maryland, College Park. LLM agents, context, and trust.
 description: Manan Suri is a Computer Science PhD student at the University of Maryland (GAMMA Lab, advised by Dinesh Manocha) working on LLM agents - trustworthy context use, attribution, efficient parametric memory with LoRA adapters, and the benchmarks agents need.
@@ -15,9 +16,10 @@ profile:
 
 news: true
 press: true
+talks: true
 service: true
 latest_posts: false
-selected_papers: true
+selected_papers: false
 social: true
 ---
 

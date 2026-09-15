@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Started as a Research Assistant at NIST, working on robust software engineering agents.
+Started as a research fellow at NIST, working on robust software engineering agents.

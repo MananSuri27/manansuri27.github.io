@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I'm visiting Singapore to attend EMNLP 2023. I'll be presenting our paper, "CoSyn: Detecting Implicit Hate Speech in Online Conversations Using a Context Synergized Hyperbolic Network".
+Presented our paper "CoSyn: Detecting Implicit Hate Speech in Online Conversations Using a Context Synergized Hyperbolic Network" at EMNLP 2023 in Singapore.

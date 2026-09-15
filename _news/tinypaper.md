@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Our paper "Doc2Command: Furthering Language guided Document Editing" got accepted at ICLR 2024, TinyPapers track!
+Our paper "Doc2Command: Furthering Language Guided Document Editing" was accepted at the ICLR 2024 Tiny Papers track.

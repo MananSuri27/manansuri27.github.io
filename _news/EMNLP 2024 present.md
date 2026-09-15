@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I presented our paper "DocEdit-v2: Document Structure Editing Via Multimodal LLM Grounding" at EMNLP 2024, in Miami! I was also a Volunteer Coordinator at the conference.
+Presented our paper "DocEdit-v2: Document Structure Editing Via Multimodal LLM Grounding" at EMNLP 2024 in Miami, where I also served as a Volunteer Coordinator.
