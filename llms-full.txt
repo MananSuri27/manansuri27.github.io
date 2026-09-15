@@ -1,0 +1,152 @@
+# Manan Suri — full site text for LLMs
+
+Canonical: https://manansuri.com/ · Short index: https://manansuri.com/llms.txt
+
+## About
+
+Manan Suri is a PhD student in Computer Science at the University of Maryland, College Park, advised by Prof. Dinesh Manocha at the GAMMA Lab (https://www.cs.umd.edu/people/manans). He is not the IIT Delhi professor of the same name.
+
+I am a PhD student in Computer Science at the University of Maryland, College Park, advised by Prof. Dinesh Manocha at the GAMMA Lab.
+
+I work on making AI agents capable in practice. My research asks how agents should hold and use context — in prompts, in retrieved documents, or baked into parameters — and how we know when to trust what they produce. On the trust side, I build attribution methods that ground agent outputs in charts, flowcharts, and documents, plus principled clarification under uncertainty. On the efficiency side, I develop parametric-memory techniques that distill multimodal context into reusable LoRA adapters. And because agents are only as good as their data, I build the training corpora and benchmarks the field needs.
+
+Since June 2026, I have been a research intern at Meta Superintelligence Labs in Menlo Park, working on parametric memory for agents. Before that, I was an Applied Science Intern at Amazon working on software engineering agents, and a NIST PREP fellow working on robust software engineering agents.
+
+Previously, I worked on greenwashing detection as a Data Science for Social Good Fellow at the University of Warwick, collaborating with the Algorithmic Transparency Institute, and contributed to fact attribution and document retrieval systems at Scalenut.
+
+## News
+
+- 2026-09-10: Our paper “CyberForge: Verified Vulnerability Injection at Repository Level for Cybersecurity Agent Training” is on arXiv, and was featured by UMD Computer Science in “When AI Goes on Defense”.
+- 2026-06-03: Our paper “Frames2LoRA: Parametric Video Internalization for Vision-Language Models” is on arXiv, with a project page, code, and checkpoints. It was also featured by UMD Computer Science in “Teaching AI to See Faster”.
+- 2026-06-01: Started as a research intern at Meta Superintelligence Labs in Menlo Park, working on parametric memory for agents.
+- 2026-05-20: Earned my MS in Computer Science from the University of Maryland, continuing toward the PhD.
+- 2026-04-28: Received the Outstanding Achievement award for contributions to the UMD CS Graduate Program (2025–2026).
+- 2026-04-10: Two papers accepted at ACL 2026 (Findings): “CodeScout: Contextual Problem Statement Enhancement for Software Agents” and “Structured Uncertainty Guided Clarification for LLM Agents”.
+- 2026-01-25: Started as a research fellow at NIST, working on robust software engineering agents.
+- 2025-12-01: Gave an invited talk, “From Language Models to Agents: Foundations, Frameworks, and Future Challenges”, at Illinois Institute of Technology.
+- 2025-11-03: Presented our paper “Follow the Flow: Fine-grained Flowchart Attribution with Neurosymbolic Agents” at EMNLP 2025 in Suzhou.
+- 2025-08-28: Gave an invited talk, “Fine-grained Visual Attribution”, at Adobe headquarters in San Jose.
+- 2025-08-20: Our paper “Follow the Flow: Fine-grained Flowchart Attribution with Neurosymbolic Agents” was accepted at EMNLP 2025 (main conference).
+- 2025-05-29: Joined Amazon as an Applied Scientist Intern on the agentic developer tools team (Amazon Q), working on software engineering agents.
+- 2025-05-20: Our workshop RARA: Grounding Documents with Reasoning, Agents, Retrieval, and Attribution, which I am co-organizing, was accepted at ICDM 2025.
+- 2025-05-15: Our paper “ChartLens: Fine-grained Visual Attribution in Charts” was accepted at ACL 2025 (main conference).
+- 2025-01-22: Our paper “VisDoM: Multi-Document QA with Visually Rich Elements Using Multimodal Retrieval-Augmented Generation” was accepted at NAACL 2025 (main conference).
+- 2024-11-20: Presented our paper “DocEdit-v2: Document Structure Editing Via Multimodal LLM Grounding” at EMNLP 2024 in Miami, where I also served as a Volunteer Coordinator.
+- 2024-11-01: Served as a reviewer for ACL Rolling Review (October 2024 cycle) and ICASSP 2025.
+- 2024-09-20: Our paper “DocEdit-v2: Document Structure Editing Via Multimodal LLM Grounding” was accepted at EMNLP 2024 (main conference).
+- 2024-08-26: Started my MS in Computer Science at the University of Maryland, College Park.
+- 2024-06-07: Graduated with a Bachelor of Technology in Computer Engineering from Netaji Subhas University of Technology, with First Division with Distinction.
+- 2024-04-15: Admitted to the MS in Computer Science program at the University of Maryland, College Park. Starting in fall 2024.
+- 2024-03-30: Our paper “Doc2Command: Furthering Language Guided Document Editing” was accepted at the ICLR 2024 Tiny Papers track.
+- 2023-12-03: Presented our paper “CoSyn: Detecting Implicit Hate Speech in Online Conversations Using a Context Synergized Hyperbolic Network” at EMNLP 2023 in Singapore.
+- 2023-08-24: Presented “Detecting Green Messaging and an Exploration into Greenwashing” at DataFest 2023 at The Shard, London.
+- 2023-08-10: Our paper “CoSyn: Detecting Implicit Hate Speech in Online Conversations Using a Context Synergized Hyperbolic Network” was accepted at EMNLP 2023 (main conference).
+- 2023-06-05: Started the Data Science for Social Good Fellowship at the University of Warwick.
+- 2023-05-02: Our paper “ACLM: A Selective-Denoising based Generative Data Augmentation Approach for Low-Resource Complex NER” was accepted at ACL 2023 (main conference).
+
+## Press
+
+- "When AI Goes on Defense", UMD Department of Computer Science, September 2026. On CyberForge: generating verified vulnerability-injection training data for cybersecurity agents. https://www.cs.umd.edu/article/2026/09/when-ai-goes-defense
+- "Teaching AI to See Faster", UMD Department of Computer Science, July 2026. On Frames2LoRA: turning a video into a LoRA adapter so a vision-language model can answer with zero visual tokens in context. https://www.cs.umd.edu/article/2026/07/teaching-ai-see-faster
+
+## Talks
+
+- "From Language Models to Agents: Foundations, Frameworks, and Future Challenges", Illinois Institute of Technology, December 2025.
+- "Fine-grained Visual Attribution", Adobe, San Jose, August 2025.
+- "Detecting Green Messaging and an Exploration into Greenwashing", DataFest 2023, The Shard, London, August 2023.
+
+## Service
+
+- Workshop organizer: RARA: Grounding Documents with Reasoning, Agents, Retrieval, and Attribution &mdash; ICDM 2025
+- Reviewer: ACL Rolling Review (2024&ndash;present), ICLR, AAAI, ICASSP, and other NLP/ML venues
+
+## Publications (reverse chronological)
+
+- **Frames2LoRA: Parametric Video Internalization for Vision-Language Models** (2026). Manan Suri*, Sarvesh Baskar*, Dinesh Manocha. https://arxiv.org/abs/2606.04351 Code: https://github.com/frames2lora/Frames2LoRA Project page: https://frames2lora.github.io/
+  Video is expensive for vision-language models: every frame costs hundreds of tokens, and every repeated query pays that cost again. Frames2LoRA internalizes a video parametrically. A perceiver hypernetwork reads the frozen VLM’s layer-wise states as it encodes a video and generates a LoRA adapter in a single forward pass, with no gradient updates. The adapter-augmented model then answers arbitrary queries with zero visual tokens in context: up to 1,500x lower visual-token load and 6-80x faster time-to-first-token, with outputs statistically non-inferior to full video-in-context inference.
+
+
+- **Omni2LoRA: Coherence-Preserving Parametric Memory for Efficient Omni Language Models** (2026). Puneet Mathur, Manan Suri, Dinesh Manocha. https://arxiv.org/abs/2608.09227
+  Extends the Frames2LoRA idea from video to joint audio-visual context. A Perceiver hypernetwork encodes omnimodal context into a LoRA adapter, with GRPO-based rank allocation driven by a modality-ablated counterfactual reward that preserves cross-modal coherence. 8-12% average gains over the strongest baselines on four audio-visual QA benchmarks at a 30% rank budget, and up to 12x lower time-to-first-token than full-context inference.
+
+
+- **CyberForge: Verified Vulnerability Injection at Repository Level for Cybersecurity Agent Training** (2026). Amine Lbath*, Manan Suri*, Aurélien Delaitre, Vadim Okun, Massih-Reza Amini, Ram D. Sriram, Dinesh Manocha. https://arxiv.org/abs/2608.06471
+  Security agents need training data that doesn’t exist: real repositories with known, executable vulnerabilities. CyberForge injects vulnerabilities into real C/C++ projects with dynamic validation: unit tests must pass and the proof-of-vulnerability must trigger only on the injected build. 1,034 validated vulnerabilities across 80 projects and 63 weakness categories. Fine-tuning on it lifts SEC-bench patch repair by 3.3-14.7 points, generalizing to PatchEval and other languages. Developed during a NIST PREP fellowship; featured by UMD Computer Science in "When AI Goes on Defense".
+
+
+- **CodeScout: Contextual Problem Statement Enhancement for Software Agents** (2026). Manan Suri, Xiangci Li, Mehdi Shojaie, Songyang Han, Chao-Chun Hsu, Shweta Garg, Aniket Anand Deshmukh, Varun Kumar. Findings of the Association for Computational Linguistics: ACL 2026. https://arxiv.org/abs/2603.05744
+  Current AI-powered code assistance tools struggle with poorly-defined problem statements lacking task context. CodeScout addresses this through contextual query refinement — converting underspecified requests into comprehensive problem statements via lightweight pre-exploration of target codebases. The method performs targeted context scoping, multi-perspective analysis examining potential fixes, and synthesizes insights into enhanced problem statements with reproduction steps and exploration hints. Evaluated on SWEBench-Verified, it demonstrated a 20% improvement in resolution rates with up to 27 additional issues resolved compared to baseline methods.
+
+
+- **Structured Uncertainty Guided Clarification for LLM Agents** (2026). Manan Suri, Puneet Mathur, Nedim Lipka, Franck Dernoncourt, Ryan A. Rossi, Dinesh Manocha. Findings of the Association for Computational Linguistics: ACL 2026. https://arxiv.org/abs/2511.08798
+  LLM agents extend large language models with tool-calling capabilities, but ambiguous user instructions often lead to incorrect invocations and task failures. We introduce a principled formulation of structured uncertainty over tool-call parameters, modeling joint tool-argument clarification as a POMDP with Expected Value of Perfect Information (EVPI) objective for optimal question selection and aspect-based cost modeling to prevent redundancy. Our SAGE-Agent increases coverage on ambiguous tasks by 7–39% while reducing clarification questions by 1.5–2.7x compared to baselines. We also present ClarifyBench, the first multi-turn tool-augmented disambiguation benchmark with realistic LLM-based user simulation across diverse domains.
+
+
+- **ACLM: A Selective-Denoising based Generative Data Augmentation Approach for Low-Resource Complex NER** (2023). Sreyan Ghosh, Utkarsh Tyagi, Manan Suri, Sonal Kumar, Ramaneswaran S, Dinesh Manocha. Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). https://aclanthology.org/2023.acl-long.8
+  Complex Named Entity Recognition (NER) is the task of detecting linguistically complex named entities in low-context text. In this paper, we present ACLM Attention-map aware keyword selection for Conditional Language Model fine-tuning), a novel data augmentation approach based on conditional generation, to address the data scarcity problem in low-resource complex NER. ACLM alleviates the context-entity mismatch issue, a problem existing NER data augmentation techniques suffer from and often generates incoherent augmentations by placing complex named entities in the wrong context. ACLM builds on BART and is optimized on a novel text reconstruction or denoising task - we use selective masking (aided by attention maps) to retain the named entities and certain keywords in the input sentence that provide contextually relevant additional knowledge or hints about the named entities. Compared with other data augmentation strategies, ACLM can generate more diverse and coherent augmentations preserving the true word sense of complex entities in the sentence. We demonstrate the effectiveness of ACLM both qualitatively and quantitatively on monolingual, cross-lingual, and multilingual complex NER across various low-resource settings. ACLM outperforms all our neural baselines by a significant margin (1%-36%). In addition, we demonstrate the application of ACLM to other domains that suffer from data scarcity (e.g., biomedical). In practice, ACLM generates more effective and factual augmentations for these domains than prior methods.
+
+
+- **The Geometry of Multilingual Language Models: A Fairness Lens** (2023). Cheril Shah, Yashashree Chandak, Manan Suri. https://openreview.net/forum?id=dGuMR8tLDs
+
+
+- **CoSyn: Detecting Implicit Hate Speech in Online Conversations Using a Context Synergized Hyperbolic Network** (2023). Sreyan Ghosh, Manan Suri, Purva Chiniya, Utkarsh Tyagi, Sonal Kumar, Dinesh Manocha. Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing. https://aclanthology.org/2023.emnlp-main.377/
+
+
+- **WADER: A Weak-labelling framework for Data augmentation in tExt Regression Tasks** (2023). Manan Suri, Aaryak Garg, Divya Chaudhary, Ian Gorton, Bijendra Kumar. Proceedings of the 17th International Workshop on Semantic Evaluation (SemEval-2023). https://aclanthology.org/2023.semeval-1.267
+  Intimacy is an essential element of human relationships and language is a crucial means of conveying it. Textual intimacy analysis can reveal social norms in different contexts and serve as a benchmark for testing computational models’ ability to understand social information. In this paper, we propose a novel weak-labeling strategy for data augmentation in text regression tasks called WADER. WADER uses data augmentation to address the problems of data imbalance and data scarcity and provides a method for data augmentation in cross-lingual, zero-shot tasks. We benchmark the performance of State-of-the-Art pre-trained multilingual language models using WADER and analyze the use of sampling techniques to mitigate bias in data and optimally select augmentation candidates. Our results show that WADER outperforms the baseline model and provides a direction for mitigating data imbalance and scarcity in text regression tasks.
+
+
+- **Multimodal Analysis and Modality Fusion for Detection of Depression from Twitter Data** (2023). Nalin Semwal, Manan Suri, Divya Chaudhary, Ian Gorton, Bijendra Kumar. AI4SG at AAAI 2023: Workshop on Artificial Intelligence for Social Good, Association for the Advancement of Artificial Intelligence. https://amulyayadav.github.io/AI4SG2023/images/31.pdf
+
+
+- **I Don’t Feel so Good! Detecting Depressive Tendencies Using Transformer-Based Multimodal Frameworks** (2023). Manan Suri, Nalin Semwal, Divya Chaudhary, Ian Gorton, Bijendra Kumar. Proceedings of the 2022 5th International Conference on Machine Learning and Natural Language Processing. https://doi.org/10.1145/3578741.3578817
+  One of the most common mental illnesses that affects 5% of adults globally is depression. The advancement of social media has meant that more and more people have gained a platform to voice their thoughts and beliefs. People’s social media interactions and posted content can be used to infer critical characteristics such as depressive tendencies which will allow for timely intervention and help. This paper describes a novel supervised approach to detect depressive tendencies in Twitter users using multimodal frameworks which account for user interaction and online behaviour in addition to the tweet content processed using transformers like BERT. The performance of three multimodal frameworks is described with different methods for combining modalities. The best result is obtained a cross-modality based model which improves the baseline by 12% points.
+
+
+- **Multilingual Protest Event Detection using Transformer-based Models** (2022). Manan Suri, Krish Chopra, Adwita Arora. Proceedings of the 5th Workshop on Challenges and Applications of Automated Extraction of Socio-political Events from Text (CASE). https://aclanthology.org/2022.case-1.23
+  Event detection, specifically in the socio-political domain, has posed a long-standing challenge to researchers in the NLP domain. Therefore, the creation of automated techniques that perform classification of the large amounts of accessible data on the Internet becomes imperative. This paper is a summary of the efforts we made in participating in Task 1 of CASE 2022. We use state-of-art multilingual BERT (mBERT) with further fine-tuning to perform document classification in English, Portuguese, Spanish, Urdu, Hindi, Turkish and Mandarin. In the document classification subtask, we were able to achieve F1 scores of 0.8062, 0.6445, 0.7302, 0.5671, 0.6555, 0.7545 and 0.6702 in English, Spanish, Portuguese, Hindi, Urdu, Mandarin and Turkish respectively achieving a rank of 5 in English and 7 on the remaining language tasks.
+
+
+- **A novel multimodal dynamic fusion network for disfluency detection in spoken utterances** (2022). Sreyan Ghosh, Utkarsh Tyagi, Sonal Kumar, Manan Suri, Rajiv Ratn Shah. arXiv preprint arXiv:2211.14700. https://arxiv.org/abs/2211.14700
+
+
+- **Boosting Pre-trained Language Models with Task Specific Metadata and Cost Sensitive Learning** (2022). Manan Suri. Proceedings of the 16th International Workshop on Semantic Evaluation (SemEval-2022). https://aclanthology.org/2022.semeval-1.63
+  This paper describes our system for Task 4 of SemEval 2022: Patronizing and Condescending Language Detection. Patronizing and Condescending Language (PCL) refers to language used with respect to vulnerable communities that portrays them in a pitiful way and is reflective of a sense of superiority. Task 4 involved binary classification (Subtask 1) and multi-label classification (Subtask 2) of Patronizing and Condescending Language (PCL). For our system, we experimented with fine-tuning different transformer-based pre-trained models including BERT, DistilBERT, RoBERTa and ALBERT. Further, we have used token separated metadata in order to improve our model by helping it contextualize different communities with respect to PCL. We faced the challenge of class imbalance, which we solved by experimenting with different class weighting schemes. Our models were effective in both subtasks, with the best performance coming out of models with Effective Number of Samples (ENS) class weighting and token separated metadata in both subtasks. For subtask 1 and subtask 2, our best models were finetuned BERT and RoBERTa models respectively.
+
+
+- **Multimodal BERT for Identifying Claims in Tweets** (2022). Manan Suri, Prajeet Katari, Saumay Dudeja. Proceedings of the Working Notes of CLEF 2022 - Conference and Labs of the Evaluation Forum, Bologna, Italy, September 5th - to - 8th, 2022. https://ceur-ws.org/Vol-3180/paper-55.pdf
+
+
+- **Doc2Command: Furthering Language Guided Document Editing** (2024). Manan Suri, Puneet Mathur, Ramit Sawhney, Preslav Nakov, Dinesh Manocha. The Second Tiny Papers Track at ICLR 2024. https://openreview.net/forum?id=inQ9bW5AQz
+
+
+- **Trigger Warnings: A Computational Approach to Understanding User-Tagged Trigger Warnings** (2023). Sarthak Tyagi, Adwita Arora, Krish Chopra, Manan Suri. Proceedings of the 8th Student Research Workshop associated with the International Conference Recent Advances in Natural Language Processing. https://aclanthology.org/2023.ranlp-stud.5
+  Content and trigger warnings give information about the content of material prior to receiving it and are used by social media users to tag their content when discussing sensitive topics. Trigger warnings are known to yield benefits in terms of an increased individual agency to make an informed decision about engaging with content. At the same time, some studies contest the benefits of trigger warnings suggesting that they can induce anxiety and reinforce the traumatic experience of specific identities. Our study involves the analysis of the nature and implications of the usage of trigger warnings by social media users using empirical methods and machine learning. Further, we aim to study the community interactions associated with trigger warnings in online communities, precisely the diversity and content of responses and inter-user interactions. The domains of trigger warnings covered will include self-harm, drug abuse, suicide, and depression. The analysis of the above domains will assist in a better understanding of online behaviour associated with them and help in developing domain-specific datasets for further research
+
+
+- **DocEdit-v2: Document Structure Editing Via Multimodal LLM Grounding** (2024). Manan Suri, Puneet Mathur, Franck Dernoncourt, Rajiv Jain, Vlad I Morariu, Ramit Sawhney, Preslav Nakov, Dinesh Manocha. Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing. https://aclanthology.org/2024.emnlp-main.867
+  Document structure editing involves manipulating localized textual, visual, and layout components in document images based on the user’s requests. Past works have shown that multimodal grounding of user requests in the document image and identifying the accurate structural components and their associated attributes remain key challenges for this task. To address these, we introduce the DocEditAgent, a novel framework that performs end-to-end document editing by leveraging Large Multimodal Models (LMMs). It consists of three novel components – (1) Doc2Command to simultaneously localize edit regions of interest (RoI) and disambiguate user edit requests into edit commands. (2) LLM-based Command Reformulation prompting to tailor edit commands originally intended for specialized software into edit instructions suitable for generalist LMMs. (3) Moreover, DocEditAgent processes these outputs via Large Multimodal Models like GPT-4V and Gemini, to parse the document layout, execute edits on grounded Region of Interest (RoI), and generate the edited document image. Extensive experiments on the DocEdit dataset show that DocEditAgent significantly outperforms strong baselines on edit command generation (2-33%), RoI bounding box detection (12-31%), and overall document editing (1-12%) tasks.
+
+
+- **VisDoM: Multi-Document QA with Visually Rich Elements Using Multimodal Retrieval-Augmented Generation** (2025). Manan Suri, Puneet Mathur, Franck Dernoncourt, Kanika Goswami, Ryan A. Rossi, Dinesh Manocha. Proceedings of the 2025 Annual Conference of the North American Chapter of the Association for Computational Linguistics (NAACL). https://aclanthology.org/2025.naacl-long.339/
+
+
+- **ChartLens: Fine-grained Visual Attribution in Charts** (2025). Manan Suri, Puneet Mathur, Nedim Lipka, Franck Dernoncourt, Ryan A. Rossi, Dinesh Manocha. Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). https://aclanthology.org/2025.acl-long.1094/
+  The growing capabilities of multimodal large language models (MLLMs) have advanced tasks like chart understanding. However, these models often suffer from hallucinations, where generated text sequences conflict with the provided visual data. To address this, we introduce Post-Hoc Visual Attribution for Charts, which identifies fine-grained chart elements that validate a given chart-associated response. We propose ChartLens, a novel chart attribution algorithm that uses segmentation-based techniques to identify chart objects and employs set-of-marks prompting with MLLMs for fine-grained visual attribution. Additionally, we present ChartVA-Eval, a benchmark with synthetic and real-world charts from diverse domains like finance, policy, and economics, featuring fine-grained attribution annotations. Our evaluations show that ChartLens improves fine-grained attributions by 26-66%.
+
+
+- **Follow the Flow: Fine-grained Flowchart Attribution with Neurosymbolic Agents** (2025). Manan Suri, Puneet Mathur, Nedim Lipka, Franck Dernoncourt, Ryan A. Rossi, Vivek Gupta, Dinesh Manocha. Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing. https://aclanthology.org/2025.emnlp-main.1144/
+  Flowcharts are a critical tool for visualizing decision-making processes. However, their non-linear structure and complex visual-textual relationships make it challenging to interpret them using LLMs, as vision-language models frequently hallucinate nonexistent connections and decision paths when analyzing these diagrams. This leads to compromised reliability for automated flowchart processing in critical domains such as logistics, health, and engineering. We introduce the task of Fine-grained Flowchart Attribution, which traces specific components grounding a flowchart referring LLM response. Flowchart Attribution ensures the verifiability of LLM predictions and improves explainability by linking generated responses to the flowchart’s structure. We propose FlowPathAgent, a neurosymbolic agent that performs fine-grained post hoc attribution through graph-based reasoning. It first segments the flowchart, then converts it into a structured symbolic graph, and then employs an agentic approach to dynamically interact with the graph, to generate attribution paths. Additionally, we present FlowExplainBench, a novel benchmark for evaluating flowchart attributions across diverse styles, domains, and question types. Experimental results show that FlowPathAgent mitigates visual hallucinations in LLM answers over flowchart QA, outperforming strong baselines by 10–14% on our proposed FlowExplainBench dataset.
+
+## Blog posts
+
+- 2022-01-21: A Dummy's Guide to Word2Vec — https://manansuri.com/blog/2022/a-dummys-guide-to-word2vec/. What word embeddings are, how Word2Vec learns them (CBOW and skip-gram), and how to train, probe, and visualise your own with Gensim.
+
+## Links
+
+- X: https://x.com/mananifesto
+- GitHub: https://github.com/MananSuri27
+- Google Scholar: https://scholar.google.com/citations?user=KbVluf4AAAAJ
+- Semantic Scholar: https://www.semanticscholar.org/author/145282060
+- ORCID: https://orcid.org/0000-0001-5089-2658
+- LinkedIn: https://www.linkedin.com/in/manansuri27
