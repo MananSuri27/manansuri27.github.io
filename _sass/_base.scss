@@ -546,6 +546,46 @@ footer.sticky-bottom {
 }
 
 
+// Homepage news: every item renders, the box caps the height so older
+// entries stay reachable by scrolling instead of being dropped by a limit.
+.news {
+  .news-scroll {
+    max-height: 26rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 0.4rem;
+
+    // thin, theme-aware scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: var(--global-divider-color) transparent;
+
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--global-divider-color);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--global-text-color-light);
+    }
+
+    // scroll shadows: the `local` layers hide the shadow at each extreme,
+    // so the cue only shows while there is more to scroll to.
+    background:
+      linear-gradient(var(--global-bg-color) 30%, rgba(0, 0, 0, 0)) top / 100% 26px no-repeat local,
+      linear-gradient(rgba(0, 0, 0, 0), var(--global-bg-color) 70%) bottom / 100% 26px no-repeat local,
+      radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.13), rgba(0, 0, 0, 0)) top / 100% 11px no-repeat scroll,
+      radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.13), rgba(0, 0, 0, 0)) bottom / 100% 11px no-repeat scroll;
+  }
+}
+
 // Publications
 
 .press,

@@ -64,6 +64,23 @@
   selected = {true}
 }
 
+@inproceedings{iyengar2026dragon,
+  title = {DRAGON: A Benchmark for Evidence-Grounded Visual Reasoning over Diagrams},
+  author = {Iyengar, Anirudh Iyengar Kaniyar Narayana and Kumar, Tampu Ravi and Najpande, Gaurav and Suri, Manan and Manocha, Dinesh and Mathur, Puneet and Gupta, Vivek},
+  booktitle = {Advances in Neural Information Processing Systems 39 (NeurIPS 2026), Datasets and Benchmarks Track},
+  year = {2026},
+  month = dec,
+  eprint = {2604.25231},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CV},
+  url = {https://arxiv.org/abs/2604.25231},
+  abstract = {Vision-language models often answer questions about charts, maps, infographics, and schematics correctly without grounding the answer in the diagram regions that actually support it. DRAGON asks models to predict the bounding boxes of every visual element needed to justify an answer, not just the one containing it: answer-bearing components, labels, legends, axes, and connectors. The benchmark covers 11,664 annotated instances drawn from six diagram QA datasets, with a 2,445-instance human-verified test set. Even the strongest current models reach only 23.8% grounding IoU on AI2D, so faithful visual grounding remains open.},
+  abbr = {NeurIPS},
+  bibtex_show = {true},
+  html = {https://arxiv.org/abs/2604.25231},
+  pdf = {https://arxiv.org/pdf/2604.25231}
+}
+
 @inproceedings{suri-etal-2026-codescout,
   preview = {suri-etal-2026-codescout.png},
   page = {/papers/codescout/},
@@ -112,6 +129,31 @@
     pdf = {https://arxiv.org/pdf/2511.08798},
     selected = {true},
   abbr = {ACL},
+}
+
+@inproceedings{iyengar-etal-2026-diagrams,
+    title = "{DIAGRAMS}: A Review Framework for Reasoning-Level Attribution in Diagram {QA}",
+    author = "Iyengar, Anirudh Iyengar Kaniyar Narayana and
+      Kumar, Tampu Ravi and
+      Suri, Manan and
+      Bommireddy, Raviteja and
+      Manocha, Dinesh and
+      Mathur, Puneet and
+      Gupta, Vivek",
+    booktitle = "Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 3: System Demonstrations)",
+    month = jul,
+    year = "2026",
+    address = "San Diego, California",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2026.acl-demo.76/",
+    doi = "10.18653/v1/2026.acl-demo.76",
+    pages = "774--784",
+    abstract = "Diagram QA needs attribution at the level of reasoning: every region used to derive an answer, not only the region containing it. DIAGRAMS is a schema-driven review tool that decouples the annotation interface from dataset-specific JSON through a meta-schema and per-dataset adapters, then proposes evidence regions that a human reviewer accepts, edits, or rejects. Across six diagram QA datasets, model-suggested evidence reaches 85.39% precision and 75.30% recall against reviewer-final selections, making dataset auditing and grounded supervision practical.",
+    abbr = {ACL},
+    bibtex_show = {true},
+    html = {https://aclanthology.org/2026.acl-demo.76/},
+    pdf = {https://aclanthology.org/2026.acl-demo.76.pdf},
+    code = {https://github.com/CoRAL-ASU/diagrams}
 }
 
 @inproceedings{ghosh-etal-2023-aclm,
@@ -393,6 +435,7 @@ url={https://openreview.net/forum?id=inQ9bW5AQz},
   archivePrefix={arXiv},
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2412.10704},
+  note = {Oral presentation},
   selected = {true},
   abbr = {NAACL},
   html = {https://aclanthology.org/2025.naacl-long.310/},
@@ -454,6 +497,7 @@ url={https://openreview.net/forum?id=inQ9bW5AQz},
     url = "https://aclanthology.org/2025.emnlp-main.1144/",
     pages = "22496--22519",
     ISBN = "979-8-89176-332-6",
+    note = {Oral presentation},
     abstract = "Flowcharts are a critical tool for visualizing decision-making processes. However, their non-linear structure and complex visual-textual relationships make it challenging to interpret them using LLMs, as vision-language models frequently hallucinate nonexistent connections and decision paths when analyzing these diagrams. This leads to compromised reliability for automated flowchart processing in critical domains such as logistics, health, and engineering. We introduce the task of Fine-grained Flowchart Attribution, which traces specific components grounding a flowchart referring LLM response. Flowchart Attribution ensures the verifiability of LLM predictions and improves explainability by linking generated responses to the flowchart{'}s structure. We propose FlowPathAgent, a neurosymbolic agent that performs fine-grained post hoc attribution through graph-based reasoning. It first segments the flowchart, then converts it into a structured symbolic graph, and then employs an agentic approach to dynamically interact with the graph, to generate attribution paths. Additionally, we present FlowExplainBench, a novel benchmark for evaluating flowchart attributions across diverse styles, domains, and question types. Experimental results show that FlowPathAgent mitigates visual hallucinations in LLM answers over flowchart QA, outperforming strong baselines by 10{--}14{\%} on our proposed FlowExplainBench dataset.",
     selected = {true},
   abbr = {EMNLP},

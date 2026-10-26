@@ -36,6 +36,9 @@
     - title: CodeScout
       url: /papers/codescout/
       venue: ACL 2026
+    - title: DRAGON
+      url: https://arxiv.org/abs/2604.25231
+      venue: NeurIPS 2026
     - title: ACLM
       url: /papers/aclm/
       venue: ACL 2023
