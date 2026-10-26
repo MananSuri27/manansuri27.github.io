@@ -24,7 +24,10 @@ jobs:
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.2.2'
+        # Track the 3.2 series rather than an exact patch: ruby/setup-ruby only
+        # ships prebuilt binaries for some patch versions per runner image, so a
+        # hard pin breaks whenever ubuntu-latest rolls forward.
+        ruby-version: '3.2'
         bundler-cache: true
     - name: Install and Build 🔧
       run: |
