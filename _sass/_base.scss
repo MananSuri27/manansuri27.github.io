@@ -546,9 +546,93 @@ footer.sticky-bottom {
 }
 
 
+// --- V1 polish: section rhythm, news rows, pills, link underlines ---------
+
+// Section headings get a hairline rule and a short accent tick so the page
+// separates into sections without raising the type size.
+.post > article > h2 {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 2.6rem 0 1.1rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--global-divider-color);
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 2.2rem;
+    height: 2px;
+    background: var(--global-theme-color);
+    border-radius: 2px;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+.post-header .desc {
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--global-text-color-light);
+}
+
+// Body links carry a real underline that thickens on hover.
+.post > article a:not(.btn):not(.research-pill):not(.news-title):not(.badge) {
+  text-decoration: none;
+  background-image: linear-gradient(var(--global-theme-color), var(--global-theme-color));
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+
+  &:hover {
+    background-size: 100% 2px;
+    text-decoration: none;
+  }
+}
+
+.press li,
+.talks li,
+.service li {
+  line-height: 1.6;
+  margin-bottom: 0.55rem;
+}
+
 // Homepage news: every item renders, the box caps the height so older
 // entries stay reachable by scrolling instead of being dropped by a limit.
 .news {
+  table {
+    th {
+      color: var(--global-theme-color);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      font-size: 0.82rem;
+      padding-top: 0.72rem;
+      opacity: 0.9;
+    }
+
+    td {
+      line-height: 1.6;
+      padding-top: 0.6rem;
+      padding-bottom: 0.6rem;
+    }
+
+    tr {
+      border-bottom: 1px solid var(--global-divider-color);
+
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+
   .news-scroll {
     max-height: 26rem;
     overflow-y: auto;
@@ -1327,9 +1411,16 @@ nav[data-toggle="toc"] {
 
   .research-theme {
     border: 1px solid var(--global-divider-color);
-    border-radius: 8px;
-    padding: 1rem 1.1rem;
+    border-radius: 12px;
+    padding: 1.15rem 1.2rem;
     background: var(--global-card-bg-color);
+    transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+
+    &:hover {
+      border-color: var(--global-theme-color);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px -12px rgba(0, 0, 0, 0.35);
+    }
 
     h3 {
       font-size: 1.05rem;
@@ -1355,11 +1446,13 @@ nav[data-toggle="toc"] {
   .research-pill {
     display: inline-block;
     font-size: 0.82rem;
-    border: 1px solid var(--global-text-color-light);
+    border: 1px solid var(--global-divider-color);
     border-radius: 999px;
-    padding: 0.15rem 0.65rem;
+    padding: 0.22rem 0.7rem;
     color: var(--global-text-color);
     text-decoration: none;
+    background: rgba(159, 11, 30, 0.08);
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 
     span {
       color: var(--global-text-color-light);
@@ -1368,9 +1461,14 @@ nav[data-toggle="toc"] {
     }
 
     &:hover {
-      border-color: var(--global-theme-color);
-      color: var(--global-theme-color);
+      background: var(--global-theme-color);
+      border-color: transparent;
+      color: var(--global-hover-text-color);
       text-decoration: none;
+    }
+
+    &:hover span {
+      color: rgba(255, 255, 255, 0.8);
     }
   }
 }

@@ -66,6 +66,11 @@ max_width: 800px
 serve_og_meta: true # Include Open Graph meta tags in the HTML head
 serve_schema_org: true # Include Schema.org in the HTML head
 og_image: https://manansuri.com/assets/img/og-card.png # The site-wide (default for all links) Open Graph preview image (1200x630)
+og_video: https://manansuri.com/assets/video/og-video.mp4 # Autoplaying link preview on Discord, Slack, Facebook, LinkedIn
+og_video_width: 1200
+og_video_height: 630
+og_video_type: video/mp4
+twitter_player: https://manansuri.com/og-player/ # X ignores og:video; it needs a Player card pointing at an HTTPS iframe
 
 # -----------------------------------------------------------------------------
 # Social integration

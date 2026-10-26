@@ -8,7 +8,7 @@ description: Manan Suri is a Computer Science PhD student at the University of M
 
 profile:
   align: right
-  image: manansuri.jpeg
+  image: manansuri.jpg
   image_circular: false
   address: >
     5108, 8125 Paint Branch Dr  

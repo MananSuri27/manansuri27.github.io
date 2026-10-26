@@ -1,0 +1,34 @@
+---
+layout: none
+permalink: /og-player/
+sitemap: false
+noindex: true
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Manan Suri</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1A181C; overflow: hidden; }
+  video { width: 100%; height: 100%; object-fit: contain; display: block; }
+</style>
+</head>
+<body>
+<!--
+  Player-card target for X, which ignores og:video. X loads this page in an
+  iframe, so it stays a bare document: no navbar, no analytics, no theme JS.
+  `muted` + `playsinline` are what make autoplay permissible at all. The media
+  paths are relative so the page also works on a local or preview build; the
+  absolute URLs live in the meta tags, where Open Graph requires them.
+-->
+<video
+  src="{{ '/assets/video/og-video.mp4' | relative_url }}"
+  poster="{{ '/assets/img/og-card.png' | relative_url }}"
+  autoplay muted loop playsinline preload="metadata"
+  aria-label="Manan Suri, CS PhD student at the University of Maryland">
+</video>
+</body>
+</html>

@@ -70,6 +70,20 @@
     <meta property="og:description" content="{%- if page.description -%}{{ page.description }}{%- else -%}{{ site.description }}{%- endif -%}" />
     {% if page.og_image or site.og_image -%}
     <meta property="og:image" content="{%- if page.og_image -%}{{ page.og_image }}{%- else -%}{{ site.og_image }}{%- endif -%}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    {%- endif %}
+    {%- comment -%}
+      og:video only on the homepage: the clip is about the person, so it would
+      misrepresent a paper or post page. Discord, Slack, Facebook and LinkedIn
+      autoplay it; everything else falls back to og:image.
+    {%- endcomment -%}
+    {% if site.og_video and page.url == "/" %}
+    <meta property="og:video" content="{{ site.og_video }}" />
+    <meta property="og:video:secure_url" content="{{ site.og_video }}" />
+    <meta property="og:video:type" content="{{ site.og_video_type }}" />
+    <meta property="og:video:width" content="{{ site.og_video_width }}" />
+    <meta property="og:video:height" content="{{ site.og_video_height }}" />
     {%- endif %}
     <meta property="og:locale" content="{{ site.lang }}" />
     {%- if is_blog_post and page.date %}
@@ -81,7 +95,20 @@
     {%- endif %}
 
     <!-- Twitter card -->
+    {%- comment -%}
+      X does not read og:video. A player card pointing at an HTTPS iframe is the
+      only way to get the clip inline there; without it X shows og:image.
+    {%- endcomment -%}
+    {% if site.twitter_player and page.url == "/" -%}
+    <meta name="twitter:card" content="player" />
+    <meta name="twitter:player" content="{{ site.twitter_player }}" />
+    <meta name="twitter:player:width" content="{{ site.og_video_width }}" />
+    <meta name="twitter:player:height" content="{{ site.og_video_height }}" />
+    <meta name="twitter:player:stream" content="{{ site.og_video }}" />
+    <meta name="twitter:player:stream:content_type" content="{{ site.og_video_type }}" />
+    {%- else -%}
     <meta name="twitter:card" content="{%- if page.og_image or site.og_image -%}summary_large_image{%- else -%}summary{%- endif -%}" />
+    {%- endif %}
     <meta name="twitter:title" content="{%- if page.title and page.url != "/" -%}{{ page.title }} | {{ title }}{%- else -%}{{ title }}{%- endif -%}" />
     <meta name="twitter:description" content="{%- if page.description -%}{{ page.description }}{%- else -%}{{ site.description }}{%- endif -%}" />
     {% if page.og_image or site.og_image -%}

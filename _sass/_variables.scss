@@ -28,11 +28,27 @@ $grey-color-light:    lighten($grey-color, 40%);
 $grey-color-dark:     #1C1C1D;
 $grey-900:            #212529;
 
+// Palette derived from the graduation photo: UMD crimson from the arches and
+// stole, navy from the glass, charcoal from the suit, warm stone from the
+// paving. Contrast measured against the grounds they are used on.
+$crimson-color:        #9F0B1E !default;  // 8.27:1 on white
+$crimson-color-light:  #F0657A !default;  // 5.75:1 on $warm-dark
+$navy-color:           #2E5590 !default;  // 7.45:1 on white
+$navy-color-light:     #6E9FDB !default;  // 6.42:1 on $warm-dark
+$warm-white:           #FDFCFA !default;
+$warm-ink:             #1B1A1F !default;
+$warm-grey:            #6E6862 !default;
+$warm-dark:            #1A181C !default;
+$warm-text-dark:       #EDEAE6 !default;
+$warm-grey-light:      #A9A29B !default;
+$warm-card-dark:       #232027 !default;
+$warm-divider-dark:    #332F37 !default;
+
 $white-color: #ffffff !default;
 $black-color: #000000 !default;
 
 
 // Theme colors
 
-$code-bg-color-light:     rgba($purple-color, 0.05);
+$code-bg-color-light:     rgba($crimson-color, 0.05);
 $code-bg-color-dark:      #2c3237 !default;
