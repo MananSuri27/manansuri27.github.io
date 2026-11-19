@@ -2,7 +2,7 @@
 layout: paper
 title: "Frames2LoRA: Parametric Video Internalization for Vision-Language Models"
 short_title: "Frames2LoRA"
-description: "Frames2LoRA turns a video into a LoRA adapter in one forward pass, so a frozen VLM answers with zero visual tokens in context. arXiv preprint, 2026."
+description: "Frames2LoRA turns a video into a LoRA adapter in one forward pass, so a frozen VLM answers with zero visual tokens in context. Findings of EMNLP 2026."
 bibkey: suri2026frames2lora
 authors:
   - name: Manan Suri
@@ -15,8 +15,8 @@ authors:
   - name: Dinesh Manocha
     url: https://www.cs.umd.edu/people/dmanocha
 affiliations: "University of Maryland, College Park"
-venue: "arXiv preprint"
-venue_short: "arXiv"
+venue: "Findings of the Association for Computational Linguistics: EMNLP 2026"
+venue_short: "EMNLP 2026 Findings"
 year: 2026
 date: 2026-06-03
 arxiv: "2606.04351"

@@ -19,13 +19,16 @@
       url: /papers/docedit-v2/
       venue: EMNLP 2024
 - theme: Efficient context and parametric memory
-  blurb: Distilling long multimodal context (video, audio-visual streams) into reusable LoRA adapters so a frozen model can answer repeated queries with zero context tokens.
+  blurb: Distilling long context - video, audio-visual streams, whole conversation histories - into reusable LoRA adapters, so a frozen model answers from its weights instead of paying for the context again.
   papers:
     - title: Frames2LoRA
       url: /papers/frames2lora/
-      venue: arXiv 2026
+      venue: EMNLP 2026
     - title: Omni2LoRA
       url: /papers/omni2lora/
+      venue: arXiv 2026
+    - title: CLAM
+      url: https://arxiv.org/abs/2611.20759
       venue: arXiv 2026
 - theme: Data and benchmarks for agents
   blurb: Building the training corpora and evaluations agents actually need, from verified vulnerability-injection data for security agents to better problem statements for software agents.
